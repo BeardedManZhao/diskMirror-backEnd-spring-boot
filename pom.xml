@@ -50,6 +50,27 @@
         </dependency>
 
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <!-- 引入一个打包插件 -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- 可选配置：指定启动主类 -->
+                <configuration>
+                    <mainClass>top.lingyuzhao.diskMirror.backEnd.springConf.DiskMirrorMAIN</mainClass>
+                </configuration>
+                <!-- 绑定maven生命周期阶段到repackage goal，用于构建可执行jar -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>

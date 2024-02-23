@@ -5,6 +5,7 @@ diskMirror 后端服务器的 SpringBoot 版本，此版本中拓展了 DiskMirr
 ## 我如何使用？
 
 您只需要将此项目源码克隆，然后修改配置文件即可，下面是配置文件的模板。
+
 ```yaml
 disk-mirror:
   # 此配置项目代表的就是是否启用 diskMirror 如果设置为 false 则代表不启用，diskMirror 的starter 将不会被加载，需要您手动设置此参数
@@ -29,6 +30,13 @@ disk-mirror:
   secure-key: ""
   # 指定的几个用户的空间对应的容量
   space-max-size: { }
+```
+
+当然，您也可以直接在启动参数中设置配置文件的使用，下面展示的就是使用 Java 命令启动 SpringBoot 包的语法，其中包含两个路径，第一个是配置文件的路径，第二个是 SpringBoot 包的路径，这样就可以实现让
+SpringBoot 自动加载您写好的配置文件。
+
+```
+java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/xxx/diskMirror-backEnd-spring-boot-1.0-SNAPSHOT.jar
 ```
 
 ## 更新日志
