@@ -6,6 +6,12 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.lang.NonNull;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import top.lingyuzhao.utils.StrUtils;
+
+import java.util.Arrays;
 
 /**
  * diskMirror 的后端服务器主类
@@ -16,10 +22,26 @@ import org.springframework.context.ConfigurableApplicationContext;
         "top.lingyuzhao.diskMirror.backEnd.springController",
         "top.lingyuzhao.diskMirror.starter"
 })
-public class DiskMirrorMAIN {
+public class DiskMirrorMAIN implements WebMvcConfigurer {
     public final static Logger logger = LoggerFactory.getLogger(DiskMirrorMAIN.class);
 
+    /**
+     * 跨域允许列表
+     */
+    public static String[] corsAllowOrigin;
+
     public static void main(String[] args) {
+
+        // 首先解析参数 1 位置 是否是
+        // 首先解析参数 2 位置 是否有配置跨域允许资源
+        if (args.length >= 2) {
+            corsAllowOrigin = StrUtils.splitBy(args[1], ',');
+        } else {
+            corsAllowOrigin = new String[]{};
+        }
+
+        logger.info("允许跨域列表：" + Arrays.toString(corsAllowOrigin));
+
         final ConfigurableApplicationContext run;
         try {
             run = SpringApplication.run(DiskMirrorMAIN.class);
@@ -36,9 +58,9 @@ public class DiskMirrorMAIN {
 
         final ConfigurableListableBeanFactory beanFactory = run.getBeanFactory();
         // 检查 diskMirror
-        if (beanFactory.containsBean("getAdapter")) {
-            logger.info("diskMirror-backEnd-spring-boot 已经就绪!!!");
-        } else if (beanFactory.containsBean("top.lingyuzhao.diskMirror.core.Adapter")) {
+        if ((
+                beanFactory.containsBean("getAdapter") || beanFactory.containsBean("top.lingyuzhao.diskMirror.core.Adapter")) &&
+                beanFactory.containsBean("top.lingyuzhao.diskMirror.backEnd.springController.API")) {
             logger.info("diskMirror-backEnd-spring-boot 已经就绪!!!");
         } else {
             logger.error("""
@@ -126,6 +148,18 @@ public class DiskMirrorMAIN {
                     - 如果还是具有此问题 请您在 https://github.com/BeardedManZhao 中联系作者！
                         """);
             run.stop();
+        }
+    }
+
+    @Override
+    public void addCorsMappings(@NonNull CorsRegistry registry) {
+        if (corsAllowOrigin.length > 0) {
+            registry.addMapping("/**")
+                    .allowedHeaders("*")
+                    .allowedOrigins(corsAllowOrigin)
+                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    .allowCredentials(true)
+                    .maxAge(3600L);
         }
     }
 }

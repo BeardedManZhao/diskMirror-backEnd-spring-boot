@@ -12,7 +12,7 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
-    <!--  设置 SpringBoot3 做为父项目 所有的 SpringBoot 项目都应该以此为父项目  -->
+    <!--  设置 SpringBoot 做为父项目 所有的 SpringBoot 项目都应该以此为父项目  -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -39,14 +39,14 @@
         <dependency>
             <groupId>io.github.BeardedManZhao</groupId>
             <artifactId>DiskMirrorBackEnd</artifactId>
-            <version>2024.02.21</version>
+            <version>2024.03.25</version>
         </dependency>
 
-        <!-- diskMirror 后端服务器需要的依赖 -->
+        <!-- diskMirror 的版本 -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
+            <groupId>io.github.BeardedManZhao</groupId>
+            <artifactId>diskMirror</artifactId>
+            <version>1.1.7</version>
         </dependency>
 
     </dependencies>

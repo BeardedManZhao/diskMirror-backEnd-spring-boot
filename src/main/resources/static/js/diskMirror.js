@@ -16,6 +16,20 @@ class DiskMirror {
     }
 
     /**
+     * 通过异或算法加密
+     * @param value {number} 要加密的字符串
+     * @return {number} 加密后的结果
+     */
+    xorEncrypt(value) {
+        let encrypted = value;
+        const sk_str = this.sk.toString();
+        for (let i = 0; i < sk_str.length; i++) {
+            encrypted -= sk_str.charCodeAt(i) << 1;
+        }
+        return encrypted;
+    }
+
+    /**
      * 设置本组件要使用的盘镜控制器
      * @param controllerName 盘镜控制器名称
      */
@@ -34,9 +48,11 @@ class DiskMirror {
     /**
      * 设置本组件使用的盘镜的 安全key
      * @param key {int} 此key 用于标识您的身份，让服务器相信您，且允许您访问，需要设置与服务器相同
+     * @param domain {string} 您希望在哪个域下使用此安全密钥？默认情况下，此值是 undefined，表示您希望在当前域下使用此安全密钥，值得注意是，请确保您的盘镜后端服务器在此域下哦！因为您要携带这个cookie 访问后端呢！
      */
-    setSk(key = 0) {
+    setSk(key = 0, domain = undefined) {
         this.sk = key;
+        this.setDiskMirrorXorSecureKey(domain);
     }
 
     /**
@@ -357,6 +373,38 @@ class DiskMirror {
     }
 
     /**
+     * 将指定的文件的对象获取到，并传递给您自己提供的函数中！
+     * @param userId {int} 空间id
+     * @param type {'TEXT'|'Binary'} 文件类型
+     * @param fileName {string} 需要被获取的文件目录名称
+     * @param okFun {function} 操作成功之后的回调函数 输入是获取的文件的 url 地址！
+     * @param errorFun {function} 操作失败之后的回调函数 输入是错误信息的错误码
+     * @param checkFun {function} 操作前的检查函数 输入是请求参数对象，如果返回的是一个false 则代表检查失败不继续操作
+     */
+    downLoad(userId, type, fileName, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e), checkFun = undefined) {
+        if (userId === undefined || type == null || type === '' || fileName === undefined || fileName === '' || okFun === undefined) {
+            const err = "您必须要输入 userId 和 type 以及 fileName 和 okFun 参数才可以进行文件对象的获取！"
+            if (errorFun !== undefined) {
+                errorFun(err)
+            } else {
+                console.error(err)
+            }
+            return
+        }
+        if (checkFun !== undefined && !checkFun({
+            userId: userId,
+            type: type,
+            fileName: fileName
+        })) {
+            return;
+        }
+        // 判断是否有名为 diskMirror_xor_secure_key 的 cookie 如果没有就直接追加一个 cookie 的名字是 diskMirror_xor_secure_key 内容是 ${this.xorEncrypt(this.sk.toString())}
+
+        // 开始计算 url
+        okFun(this.diskMirrorUrl + this.getController() + `/downLoad/${userId}/${type}?fileName=${fileName}`)
+    }
+
+    /**
      * 获取指定空间的最大容量 单位是 字节
      *
      * 需要确保远程的 diskMirror 服务器是在 2024年 2 月 17 日 以及之后发布的！！
@@ -371,22 +419,23 @@ class DiskMirror {
         axios(
             {
                 method: 'post',
-                url: this.diskMirrorUrl + this.getController() + '/mkdirs',
+                url: this.diskMirrorUrl + this.getController() + '/getSpaceSize',
                 params: {
                     spaceId: userId.toString()
                 }
             }
         ).then(function (res) {
-            if (isNaN(res.data)) {
+            const data = res.data;
+            if (isNaN(data['res'])) {
                 if (errorFun !== undefined) {
-                    errorFun(res.data)
+                    errorFun(data['res'] + " is NAN!!!")
                 }
                 return;
             }
             if (okFun !== undefined) {
-                okFun(res.data)
+                okFun(data['res'])
             } else {
-                console.info(res.data)
+                console.info(data['res'])
             }
         }).catch(function (err) {
             if (errorFun !== undefined) {
@@ -426,5 +475,32 @@ class DiskMirror {
                 console.error(err)
             }
         });
+    }
+
+    /**
+     * 在一些操作中，我们可能需要将 sk 包含在 cookie 中，因此可能会需要使用这个函数，这个函数一般来说不需要用户手动调用！
+     *
+     * 因为在设置好 sk 的时候，它会自动被调用！请勿随意修改此函数带来的cookie，某些后端服务会使用到！
+     *
+     * @param domain {string} 需要被设置的cookie的域名 默认是当前域
+     */
+    setDiskMirrorXorSecureKey(domain) {
+        // 检查名为 diskMirror_xor_secure_key 的 cookie 是否存在
+        const cookieName = 'diskMirror_xor_secure_key';
+        // 如果存在就更新 cookie 的值
+        const encryptedValue = this.xorEncrypt(this.getSk());
+        if (this.isSetCookie && this.cookieValue === encryptedValue && this.cookieDoMain === domain) {
+            // 如果设置过 cookie 且 值 和 域 相同 则这里就不继续更新 cookie 了
+            return;
+        }
+        if (domain) {
+            document.cookie = `${cookieName}=${encryptedValue};path=/;domain=${domain}`;
+            return;
+        }
+        document.cookie = `${cookieName}=${encryptedValue};path=/`;
+        // 标记 cookie 信息
+        this.isSetCookie = true;
+        this.cookieValue = encryptedValue;
+        this.cookieDoMain = domain;
     }
 }
