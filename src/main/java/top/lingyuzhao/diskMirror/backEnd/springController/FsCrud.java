@@ -290,4 +290,25 @@ public class FsCrud implements CRUD {
     public String getVersion() {
         return ((DiskMirror) DISK_MIRROR_CONFIG.getOrDefault(WebConf.IO_MODE, DiskMirror.LocalFSAdapter)).getVersion();
     }
+
+    @Override
+    public String getUseSize(HttpServletRequest httpServletRequest) {
+        try {
+            final Part params = httpServletRequest.getPart("params");
+            if (params == null) {
+                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+            } else {
+                try (
+                        final InputStream inputStream = params.getInputStream()
+                ) {
+                    final JSONObject jsonObject = JSONObject.parseObject(IOUtils.getStringByStream(inputStream, DISK_MIRROR_CONFIG.getString(Config.CHAR_SET)));
+                    jsonObject.put("useSize", adapter.getUseSize(jsonObject));
+                    return jsonObject.toString();
+                }
+            }
+        } catch (IOException | RuntimeException | ServletException e) {
+            WebConf.LOGGER.error("getUseSize 函数调用错误!!!", e);
+            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+        }
+    }
 }

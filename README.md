@@ -56,6 +56,10 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
+### 2024.03.27 正在开发
+
+- 新增 `public String getUseSize(HttpServletRequest httpServletRequest);` 函数，能够显式的获取到磁盘的使用情况。
+
 ### 2024.03.26
 
 - 更新了其中的一些组件

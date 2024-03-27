@@ -478,6 +478,58 @@ class DiskMirror {
     }
 
     /**
+     * 获取指定空间的已使用容量 单位是 字节
+     * @param userId {int} 需要被检索的空间id
+     * @param type {string} 需要被检索的文件类型
+     * @param okFun {function} 操作成功之后的回调函数 输入是计算出来的已使用容量
+     * @param errorFun {function} 操作失败之后的回调函数 输入是错误信息
+     */
+    getUseSize(userId, type, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e)) {
+        if (userId === undefined || type == null || type === '') {
+            const err = "您必须要输入 userId 和 type 参数才可以进行使用数量的获取"
+            if (errorFun !== undefined) {
+                errorFun(err)
+            } else {
+                console.error(err)
+            }
+            return
+        }
+        const formData = new FormData();
+        // 设置请求参数
+        const params = {
+            userId: userId,
+            type: type,
+            "secure.key": this.getSk()
+        }
+        formData.append('params', JSON.stringify(params))
+
+        // 开始进行请求发送
+        axios.defaults.withCredentials = true;
+        axios(
+            {
+                method: 'post',
+                url: this.diskMirrorUrl + this.getController() + '/getUseSize',
+                data: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        ).then(function (res) {
+            if (okFun !== undefined) {
+                okFun(res.data)
+            } else {
+                console.info(res.data)
+            }
+        }).catch(function (err) {
+            if (errorFun !== undefined) {
+                errorFun(err)
+            } else {
+                console.error(err)
+            }
+        });
+    }
+
+    /**
      * 在一些操作中，我们可能需要将 sk 包含在 cookie 中，因此可能会需要使用这个函数，这个函数一般来说不需要用户手动调用！
      *
      * 因为在设置好 sk 的时候，它会自动被调用！请勿随意修改此函数带来的cookie，某些后端服务会使用到！

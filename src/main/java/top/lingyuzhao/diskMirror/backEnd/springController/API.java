@@ -1,7 +1,5 @@
 package top.lingyuzhao.diskMirror.backEnd.springController;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
@@ -28,38 +26,4 @@ public class API extends FsCrud {
         super(adapter);
     }
 
-    @Override
-    public String add(HttpServletRequest httpServletRequest) {
-        return super.add(httpServletRequest);
-    }
-
-    @Override
-    public String remove(HttpServletRequest httpServletRequest) {
-        return super.remove(httpServletRequest);
-    }
-
-    @Override
-    public String reName(HttpServletRequest httpServletRequest) {
-        return super.reName(httpServletRequest);
-    }
-
-    @Override
-    public String get(HttpServletRequest httpServletRequest) {
-        return super.get(httpServletRequest);
-    }
-
-    @Override
-    public void downLoad(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, String userId, String type, String fileName, Integer sk) {
-        super.downLoad(httpServletRequest, httpServletResponse, userId, type, fileName, sk);
-    }
-
-    @Override
-    public String mkdirs(HttpServletRequest httpServletRequest) {
-        return super.mkdirs(httpServletRequest);
-    }
-
-    @Override
-    public String setSpaceSize(HttpServletRequest httpServletRequest) {
-        return super.setSpaceSize(httpServletRequest);
-    }
 }
