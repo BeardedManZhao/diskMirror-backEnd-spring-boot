@@ -49,6 +49,26 @@
             <version>1.1.7</version>
         </dependency>
 
+        <!-- 如果需要对接 HDFS 才导入 如果不需要就不导入此依赖 -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>3.3.2</version>
+            <!--        <scope>provided</scope>-->
+        </dependency>
+        <!-- 如果您要使用 DiskMirrorHttpAdapter 请添加 httpClient 核心库 反之不需要 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.14</version>
+            <!--        <scope>provided</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.5.14</version>
+            <!--        <scope>provided</scope>-->
+        </dependency>
     </dependencies>
     <build>
         <plugins>

@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class API extends FsCrud {
 
     @Autowired
-    public API(top.lingyuzhao.diskMirror.core.Adapter adapter) {
-        super(adapter);
+    public API(top.lingyuzhao.diskMirror.core.Adapter adapter, top.lingyuzhao.diskMirror.starter.conf.properties.DiskMirrorProperties properties) {
+        super(adapter, properties);
     }
 
 }

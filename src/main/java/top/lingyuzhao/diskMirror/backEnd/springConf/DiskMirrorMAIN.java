@@ -19,8 +19,8 @@ import java.util.Arrays;
  * @author zhao
  */
 @SpringBootApplication(scanBasePackages = {
-        "top.lingyuzhao.diskMirror.backEnd.springController",
-        "top.lingyuzhao.diskMirror.starter"
+        "top.lingyuzhao.diskMirror.starter",
+        "top.lingyuzhao.diskMirror.backEnd.springController"
 })
 public class DiskMirrorMAIN implements WebMvcConfigurer {
     public final static Logger logger = LoggerFactory.getLogger(DiskMirrorMAIN.class);

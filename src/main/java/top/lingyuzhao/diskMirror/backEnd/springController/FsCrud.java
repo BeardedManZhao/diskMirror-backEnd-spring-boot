@@ -37,11 +37,13 @@ public class FsCrud implements CRUD {
     /**
      * 直接使用在外部初始化好的适配器来进行初始化
      *
-     * @param adapter 在外界实例化好的适配器对象
+     * @param adapter    在外界实例化好的适配器对象
+     * @param properties 配置类 通过 starter 获取到的配置类
      */
-    public FsCrud(Adapter adapter) {
+    public FsCrud(Adapter adapter, top.lingyuzhao.diskMirror.starter.conf.properties.DiskMirrorProperties properties) {
         this.adapter = adapter;
         this.DISK_MIRROR_CONFIG = adapter.getConfig();
+        this.DISK_MIRROR_CONFIG.put(WebConf.IO_MODE, properties.getAdapterType());
     }
 
     /**
@@ -288,7 +290,8 @@ public class FsCrud implements CRUD {
      * @return 操作成功之后返回的结果
      */
     public String getVersion() {
-        return ((DiskMirror) DISK_MIRROR_CONFIG.getOrDefault(WebConf.IO_MODE, DiskMirror.LocalFSAdapter)).getVersion();
+        final DiskMirror orDefault = (DiskMirror) DISK_MIRROR_CONFIG.getOrDefault(WebConf.IO_MODE, DiskMirror.LocalFSAdapter);
+        return orDefault.getVersion() + '\n' + adapter.version();
     }
 
     @Override
