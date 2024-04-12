@@ -54,7 +54,15 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 中是一样的，您可以 [点击这里前往 diskMirrorBackEnd](https://www.lingyuzhao.top/?/linkController=/articleController&link=88968287)
 的文档进行查看。
 
+您还可以直接使用此项目的前端界面来进行操作！
+
 ## 更新日志
+
+### 2024.04.12
+
+- 集成了前端项目
+- 删除了不必要的类
+- 新增转存功能支持！
 
 ### 2024.03.28
 

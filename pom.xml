@@ -39,14 +39,14 @@
         <dependency>
             <groupId>io.github.BeardedManZhao</groupId>
             <artifactId>DiskMirrorBackEnd</artifactId>
-            <version>2024.03.25</version>
+            <version>2024.04.12</version>
         </dependency>
 
         <!-- diskMirror 的版本 -->
         <dependency>
             <groupId>io.github.BeardedManZhao</groupId>
             <artifactId>diskMirror</artifactId>
-            <version>1.1.7</version>
+            <version>1.2.0</version>
         </dependency>
 
         <!-- 如果需要对接 HDFS 才导入 如果不需要就不导入此依赖 -->

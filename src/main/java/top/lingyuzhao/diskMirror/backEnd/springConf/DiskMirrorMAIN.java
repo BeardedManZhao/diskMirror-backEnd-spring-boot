@@ -60,7 +60,7 @@ public class DiskMirrorMAIN implements WebMvcConfigurer {
         // 检查 diskMirror
         if ((
                 beanFactory.containsBean("getAdapter") || beanFactory.containsBean("top.lingyuzhao.diskMirror.core.Adapter")) &&
-                beanFactory.containsBean("top.lingyuzhao.diskMirror.backEnd.springController.API")) {
+                beanFactory.containsBean("top.lingyuzhao.diskMirror.backEnd.springController.FsCrud")) {
             logger.info("diskMirror-backEnd-spring-boot 已经就绪!!!");
         } else {
             logger.error("""

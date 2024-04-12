@@ -1,6 +1,6 @@
 disk-mirror:
-  # 此配置项目代表的就是是否启用 diskMirror 如果设置为 false 则代表不启用，diskMirror 的starter 将不会被加载，需要您手动设置此参数
-  enable-feature: false
+  # 此配置项目代表的就是是否启用 diskMirror 如果设置为 false 则代表不启用，diskMirror 的starter 将不会被加载
+  enable-feature: true
   # 要使用的盘镜适配器类型 在这里默认数值是本地盘镜适配器，具体的适配器 您可以查阅 top.lingyuzhao.diskMirror.core.DiskMirror 类
   adapter-type: "LocalFSAdapter"
   # 要被盘镜管理的目录 用于存储数据的目录 此目录是真实目录

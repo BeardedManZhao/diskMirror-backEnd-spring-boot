@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在线预览</title>
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+    </style>
+</head>
+<link href="css/backEnd.css" rel="stylesheet">
+<link href="css/public.css" rel="stylesheet">
+<body>
+<div style="text-align: center">
+    <img alt="预览图" style="height: auto; max-width: 90%" hidden>
+    <video style="height: auto; max-width: 90%" hidden controls></video>
+    <audio style="height: auto; max-width: 90%" hidden controls></audio>
+</div>
+<div class="nav_pc">
+    <h2 class="item_Button noClick" style="text-align: center">
+
+    </h2>
+    <div class="button_list0">
+        <button class="item_Button">点击下载!</button>
+        <button class="item_Button" onclick="window.open('index.html')">前往主页!</button>
+    </div>
+</div>
+</body>
+</html>
+<script src="js/DiskMirrorFront.js"></script>
+<script>
+    const searchParams = DiskMirrorFront.search_Params("url");
+    if (searchParams.length === 0){
+        document.querySelector("body").style.backgroundImage = "url('image/404.jpg')";
+    } else {
+        // 获取到 url
+        const imageExtensions = ['.jpg', '.png', '.jpeg', '.gif', '.bmp', '.webp', '.svg'];
+        const videoExtensions = ['.mp4', '.avi', '.mkv', '.flv', '.wmv', '.mov', '.mpg', '.mpeg', '.rmvb', '.rm', '.3gp', '.ts', '.m4v', '.webm', '.vob', '.mts', '.m2ts', '.mxf', '.ogv', '.ogm', '.m2v', '.mpe'];
+        const audioExtensions = ['.mp3', '.wav', '.flac', '.aac', '.wma'];
+
+        const searchParam = searchParams[searchParams.length - 1];
+
+        document.querySelector("h2").innerText = searchParam;
+
+        // 获取到后缀
+        const searchParamType = searchParam.substring(searchParam.lastIndexOf('.'));
+
+        if (imageExtensions.includes(searchParamType)) {
+            document.querySelector('img').src = searchParam;
+            document.querySelector('img').hidden = false;
+        } else if (videoExtensions.includes(searchParamType)) {
+            document.querySelector('video').src = searchParam;
+            document.querySelector('video').hidden = false;
+        } else if (audioExtensions.includes(searchParamType)) {
+            document.querySelector('audio').src = searchParam;
+            document.querySelector('audio').hidden = false;
+        } else {
+            document.querySelector('button').innerText = `不支持预览 *${searchParamType} 点击下载此资源!`
+            document.querySelector('button').addEventListener('click', () => window.open(searchParam))
+        }
+    }
+</script>

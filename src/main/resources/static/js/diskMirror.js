@@ -11,8 +11,8 @@ class DiskMirror {
     constructor(url) {
         // constructor body
         this.diskMirrorUrl = url; // This is the diskMirrorUrl variable
-        this.setSk()
-        this.setController('/FsCrud')
+        this.setSk();
+        this.setController('/FsCrud');
     }
 
     /**
@@ -52,7 +52,9 @@ class DiskMirror {
      */
     setSk(key = 0, domain = undefined) {
         this.sk = key;
-        this.setDiskMirrorXorSecureKey(domain);
+        if (key !== 0) {
+            this.setDiskMirrorXorSecureKey(domain);
+        }
     }
 
     /**
@@ -84,7 +86,7 @@ class DiskMirror {
         params["secure.key"] = this.getSk();
         formData.append('params', JSON.stringify(params));
         // 设置文件数据包
-        formData.append('file', file)
+        formData.append('file', file);
         // 开始进行请求发送
         axios.defaults.withCredentials = true;
         axios(
@@ -99,22 +101,22 @@ class DiskMirror {
         ).then(function (res) {
             if (res.data['res'] !== 'ok!!!!') {
                 if (errorFun !== undefined) {
-                    errorFun(res.data)
+                    errorFun(res.data);
                 }
                 return;
             }
             // 处理成功
             if (okFun !== undefined) {
-                okFun(res.data)
+                okFun(res.data);
             } else {
-                console.info(res.data)
+                console.info(res.data);
             }
         }).catch(function (err) {
             // 处理错误
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
         });
     }
@@ -132,11 +134,11 @@ class DiskMirror {
         if (userId === undefined || type === undefined || type === '') {
             const err = "您必须要输入 userId 以及 type 参数才可以进行 url 的获取";
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
-            return
+            return;
         }
         const formData = new FormData();
         // 设置请求参数
@@ -144,11 +146,11 @@ class DiskMirror {
             userId: userId,
             type: type,
             "secure.key": this.getSk()
-        }
+        };
         if (checkFun !== undefined && !checkFun(params)) {
             return;
         }
-        formData.append('params', JSON.stringify(params))
+        formData.append('params', JSON.stringify(params));
         // 开始进行请求发送
         axios.defaults.withCredentials = true;
         axios(
@@ -163,20 +165,20 @@ class DiskMirror {
         ).then(function (res) {
             if (res.data['res'] !== 'ok!!!!') {
                 if (errorFun !== undefined) {
-                    errorFun(res.data)
+                    errorFun(res.data);
                 }
                 return;
             }
             if (okFun !== undefined) {
-                okFun(res.data)
+                okFun(res.data);
             } else {
-                console.info(res.data)
+                console.info(res.data);
             }
         }).catch(function (err) {
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
         });
     }
@@ -194,9 +196,9 @@ class DiskMirror {
         if (userId === undefined || type == null || type === '' || fileName === undefined || fileName === '') {
             const err = "您必须要输入 userId 以及 type 和 fileName 参数才可以进行删除";
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
             return
         }
@@ -207,11 +209,11 @@ class DiskMirror {
             userId: userId,
             type: type,
             "secure.key": this.getSk()
-        }
+        };
         if (checkFun !== undefined && !checkFun(params)) {
             return;
         }
-        formData.append('params', JSON.stringify(params))
+        formData.append('params', JSON.stringify(params));
         // 开始进行请求发送
         axios.defaults.withCredentials = true;
         axios(
@@ -226,20 +228,20 @@ class DiskMirror {
         ).then(function (res) {
             if (res.data['res'] !== 'ok!!!!') {
                 if (errorFun !== undefined) {
-                    errorFun(res.data)
+                    errorFun(res.data);
                 }
                 return;
             }
             if (okFun !== undefined) {
-                okFun(res.data)
+                okFun(res.data);
             } else {
-                console.info(res.data)
+                console.info(res.data);
             }
         }).catch(function (err) {
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
         });
     }
@@ -256,11 +258,11 @@ class DiskMirror {
      */
     reName(userId, type, fileName, newName, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e), checkFun = undefined) {
         if (userId === undefined || type == null || type === '' || fileName === undefined || fileName === '' || newName === undefined || newName === '') {
-            const err = "您必须要输入 userId 和 type 以及 fileName 和 newName 参数才可以进行重命名"
+            const err = "您必须要输入 userId 和 type 以及 fileName 和 newName 参数才可以进行重命名";
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
             return
         }
@@ -272,11 +274,11 @@ class DiskMirror {
             userId: userId,
             type: type,
             "secure.key": this.getSk()
-        }
+        };
         if (checkFun !== undefined && !checkFun(params)) {
             return;
         }
-        formData.append('params', JSON.stringify(params))
+        formData.append('params', JSON.stringify(params));
         // 开始进行请求发送
         axios.defaults.withCredentials = true;
         axios(
@@ -291,20 +293,20 @@ class DiskMirror {
         ).then(function (res) {
             if (res.data['res'] !== 'ok!!!!') {
                 if (errorFun !== undefined) {
-                    errorFun(res.data)
+                    errorFun(res.data);
                 }
                 return;
             }
             if (okFun !== undefined) {
-                okFun(res.data)
+                okFun(res.data);
             } else {
-                console.info(res.data)
+                console.info(res.data);
             }
         }).catch(function (err) {
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
         });
     }
@@ -320,11 +322,11 @@ class DiskMirror {
      */
     mkdirs(userId, type, fileName, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e), checkFun = undefined) {
         if (userId === undefined || type == null || type === '' || fileName === undefined || fileName === '') {
-            const err = "您必须要输入 userId 和 type 以及 fileName 参数才可以进行文件目录的创建"
+            const err = "您必须要输入 userId 和 type 以及 fileName 参数才可以进行文件目录的创建";
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
             return
         }
@@ -335,11 +337,11 @@ class DiskMirror {
             userId: userId,
             type: type,
             "secure.key": this.getSk()
-        }
+        };
         if (checkFun !== undefined && !checkFun(params)) {
             return;
         }
-        formData.append('params', JSON.stringify(params))
+        formData.append('params', JSON.stringify(params));
         // 开始进行请求发送
         axios.defaults.withCredentials = true;
         axios(
@@ -354,20 +356,20 @@ class DiskMirror {
         ).then(function (res) {
             if (res.data['res'] !== 'ok!!!!') {
                 if (errorFun !== undefined) {
-                    errorFun(res.data)
+                    errorFun(res.data);
                 }
                 return;
             }
             if (okFun !== undefined) {
-                okFun(res.data)
+                okFun(res.data);
             } else {
-                console.info(res.data)
+                console.info(res.data);
             }
         }).catch(function (err) {
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
         });
     }
@@ -383,11 +385,11 @@ class DiskMirror {
      */
     downLoad(userId, type, fileName, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e), checkFun = undefined) {
         if (userId === undefined || type == null || type === '' || fileName === undefined || fileName === '' || okFun === undefined) {
-            const err = "您必须要输入 userId 和 type 以及 fileName 和 okFun 参数才可以进行文件对象的获取！"
+            const err = "您必须要输入 userId 和 type 以及 fileName 和 okFun 参数才可以进行文件对象的获取！";
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
             return
         }
@@ -401,7 +403,107 @@ class DiskMirror {
         // 判断是否有名为 diskMirror_xor_secure_key 的 cookie 如果没有就直接追加一个 cookie 的名字是 diskMirror_xor_secure_key 内容是 ${this.xorEncrypt(this.sk.toString())}
 
         // 开始计算 url
-        okFun(this.diskMirrorUrl + this.getController() + `/downLoad/${userId}/${type}?fileName=${fileName}`)
+        okFun(this.diskMirrorUrl + this.getController() + `/downLoad/${userId}/${type}?fileName=${fileName}`);
+    }
+
+    /**
+     * 向后端中转存一个文件
+     * @param params {{
+     *      fileName: string,
+     *      userId: int,
+     *      type: 'Binary'|'TEXT',
+     *      url: string
+     * }} 这里是请求参数对象 其中的文件名字代表上传到后端之后的文件名字，userId 代表的就是文件要上传到的指定空间的id；type就是代表的文件的类型 支持二进制和文本两种格式
+     * @param okFun {function} 操作成功之后的回调函数 输入是被上传文件的json对象
+     * @param errorFun {function} 操作失败之后的回调函数 输入是错误信息
+     * @param checkFun {function} 上传前的检查函数 输入是上传的文件对象的 json 数据 ，如果返回的是一个false 则代表不进行上传操作
+     */
+    transferDeposit(params, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e), checkFun = undefined) {
+        if (checkFun !== undefined && !checkFun(params)) {
+            return;
+        }
+        const formData = new FormData();
+        // 设置请求参数数据包
+        params["secure.key"] = this.getSk();
+        formData.append('params', JSON.stringify(params));
+        // 开始进行请求发送
+        axios.defaults.withCredentials = true;
+        axios(
+            {
+                method: 'post',
+                url: this.diskMirrorUrl + this.getController() + '/transferDeposit',
+                data: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        ).then(function (res) {
+            if (res.data['res'] !== 'ok!!!!') {
+                if (errorFun !== undefined) {
+                    errorFun(res.data);
+                }
+                return;
+            }
+            // 处理成功
+            if (okFun !== undefined) {
+                okFun(res.data);
+            } else {
+                console.info(res.data);
+            }
+        }).catch(function (err) {
+            // 处理错误
+            if (errorFun !== undefined) {
+                errorFun(err);
+            } else {
+                console.error(err);
+            }
+        });
+    }
+
+    /**
+     * 向后端中查询文件转存情况
+     * @param params {{
+     *      userId: int,
+     *      type: 'Binary'|'TEXT',
+     * }} 这里是请求参数对象 其中的文件名字代表上传到后端之后的文件名字，userId 代表的就是文件要上传到的指定空间的id；type就是代表的文件的类型 支持二进制和文本两种格式
+     * @param okFun {function} 操作成功之后的回调函数 输入是被上传文件的json对象
+     * @param errorFun {function} 操作失败之后的回调函数 输入是错误信息
+     * @param checkFun {function} 上传前的检查函数 输入是上传的文件对象的 json 数据 以及 文件对象本身，如果返回的是一个false 则代表不进行上传操作
+     */
+    transferDepositStatus(params, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e), checkFun = undefined) {
+        if (checkFun !== undefined && !checkFun(params)) {
+            return;
+        }
+        const formData = new FormData();
+        // 设置请求参数数据包
+        params["secure.key"] = this.getSk();
+        formData.append('params', JSON.stringify(params));
+        // 开始进行请求发送
+        axios.defaults.withCredentials = true;
+        axios(
+            {
+                method: 'post',
+                url: this.diskMirrorUrl + this.getController() + '/transferDepositStatus',
+                data: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        ).then(function (res) {
+            // 处理成功
+            if (okFun !== undefined) {
+                okFun(res.data);
+            } else {
+                console.info(res.data);
+            }
+        }).catch(function (err) {
+            // 处理错误
+            if (errorFun !== undefined) {
+                errorFun(err);
+            } else {
+                console.error(err);
+            }
+        });
     }
 
     /**
@@ -428,20 +530,20 @@ class DiskMirror {
             const data = res.data;
             if (isNaN(data['res'])) {
                 if (errorFun !== undefined) {
-                    errorFun(data['res'] + " is NAN!!!")
+                    errorFun(data['res'] + " is NAN!!!");
                 }
                 return;
             }
             if (okFun !== undefined) {
-                okFun(data['res'])
+                okFun(data['res']);
             } else {
-                console.info(data['res'])
+                console.info(data['res']);
             }
         }).catch(function (err) {
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
         });
     }
@@ -464,15 +566,15 @@ class DiskMirror {
             }
         ).then(function (res) {
             if (okFun !== undefined) {
-                okFun(res.data)
+                okFun(res.data);
             } else {
-                console.info(res.data)
+                console.info(res.data);
             }
         }).catch(function (err) {
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
         });
     }
@@ -486,13 +588,13 @@ class DiskMirror {
      */
     getUseSize(userId, type, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e)) {
         if (userId === undefined || type == null || type === '') {
-            const err = "您必须要输入 userId 和 type 参数才可以进行使用数量的获取"
+            const err = "您必须要输入 userId 和 type 参数才可以进行使用数量的获取";
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
-            return
+            return;
         }
         const formData = new FormData();
         // 设置请求参数
@@ -500,8 +602,8 @@ class DiskMirror {
             userId: userId,
             type: type,
             "secure.key": this.getSk()
-        }
-        formData.append('params', JSON.stringify(params))
+        };
+        formData.append('params', JSON.stringify(params));
 
         // 开始进行请求发送
         axios.defaults.withCredentials = true;
@@ -516,15 +618,15 @@ class DiskMirror {
             }
         ).then(function (res) {
             if (okFun !== undefined) {
-                okFun(res.data)
+                okFun(res.data);
             } else {
-                console.info(res.data)
+                console.info(res.data);
             }
         }).catch(function (err) {
             if (errorFun !== undefined) {
-                errorFun(err)
+                errorFun(err);
             } else {
-                console.error(err)
+                console.error(err);
             }
         });
     }

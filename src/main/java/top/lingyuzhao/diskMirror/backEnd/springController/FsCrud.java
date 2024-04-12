@@ -7,8 +7,13 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import top.lingyuzhao.diskMirror.backEnd.conf.WebConf;
 import top.lingyuzhao.diskMirror.backEnd.utils.HttpUtils;
 import top.lingyuzhao.diskMirror.conf.Config;
@@ -25,6 +30,15 @@ import java.io.InputStream;
  *
  * @author zhao
  */
+@Component("top.lingyuzhao.diskMirror.backEnd.springController.FsCrud")
+@Controller
+@RequestMapping(
+        value = "FsCrud",
+        // 告知前端页面，回复数据的解析方式
+        produces = "text/html;charset=UTF-8",
+        method = {RequestMethod.POST}
+)
+@ConditionalOnClass(value = {top.lingyuzhao.diskMirror.core.Adapter.class})
 public class FsCrud implements CRUD {
 
     /**
@@ -198,6 +212,7 @@ public class FsCrud implements CRUD {
 
         try {
             fileInputStream = adapter.downLoad(jsonObject);
+            httpServletResponse.setHeader("Content-Length", String.valueOf(fileInputStream.available()));
         } catch (IOException | UnsupportedOperationException e) {
             WebConf.LOGGER.warn(e.toString());
             httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -212,6 +227,46 @@ public class FsCrud implements CRUD {
             httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
+
+
+    @Override
+    public String transferDeposit(HttpServletRequest httpServletRequest) {
+        try {
+            final Part params = httpServletRequest.getPart("params");
+            if (params == null) {
+                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+            } else {
+                try (
+                        final InputStream inputStream = params.getInputStream()
+                ) {
+                    return adapter.transferDeposit(JSONObject.parseObject(IOUtils.getStringByStream(inputStream, DISK_MIRROR_CONFIG.getString(Config.CHAR_SET)))).toString();
+                }
+            }
+        } catch (IOException | RuntimeException | ServletException e) {
+            WebConf.LOGGER.error("transferDeposit 函数调用错误!!!", e);
+            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+        }
+    }
+
+    @Override
+    public String transferDepositStatus(HttpServletRequest httpServletRequest) {
+        try {
+            final Part params = httpServletRequest.getPart("params");
+            if (params == null) {
+                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+            } else {
+                try (
+                        final InputStream inputStream = params.getInputStream()
+                ) {
+                    return adapter.transferDepositStatus(JSONObject.parseObject(IOUtils.getStringByStream(inputStream, DISK_MIRROR_CONFIG.getString(Config.CHAR_SET)))).toString();
+                }
+            }
+        } catch (IOException | RuntimeException | ServletException e) {
+            WebConf.LOGGER.error("transferDeposit 函数调用错误!!!", e);
+            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+        }
+    }
+
 
     /**
      * 创建一个文件目录的后端处理函数

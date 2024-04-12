@@ -76,6 +76,35 @@ public interface CRUD {
     );
 
     /**
+     * 将一个 url 地址指向的数据进行转存操作，将 url 指向的文件转存到空间中的指定位置！
+     * <p>
+     * Transfer the data pointed to by a URL address to a specified location in the space!
+     *
+     * @param httpServletRequest 请求对象
+     * @return 转存后的结果
+     * <p>
+     * Result after transfer
+     */
+    @RequestMapping("/transferDeposit")
+    @ResponseBody
+    String transferDeposit(HttpServletRequest httpServletRequest);
+
+
+    /**
+     * 将一个 url 地址指向的数据进行转存操作，将 url 指向的文件转存到空间中的指定位置！
+     * <p>
+     * Transfer the data pointed to by a URL address to a specified location in the space!
+     *
+     * @param httpServletRequest 请求对象
+     * @return 转存后的结果
+     * <p>
+     * Result after transfer
+     */
+    @RequestMapping("/transferDepositStatus")
+    @ResponseBody
+    String transferDepositStatus(HttpServletRequest httpServletRequest);
+
+    /**
      * 创建一个文件目录的后端处理函数
      *
      * @param httpServletRequest 来自前端的请求对象
