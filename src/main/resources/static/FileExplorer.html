@@ -29,7 +29,7 @@
         <div id="show_area" style="text-align: center">diskMirror-front 1.0.2</div>
         <div class="button_list1">
             <button class="item_Button" onclick="window.open('index.html')">新界面</button>
-            <button class="item_Button" onclick="showTransferDeposit_fileList_table(this);"
+            <button class="item_Button" id="showTransferDeposit_fileList_table_button" onclick="showTransferDeposit_fileList_table(this);"
                     title="查看当前正在转存的任务"> 转存表
             </button>
             <button class="item_Button" onclick="transferDeposit()" title="您可以将某个链接中的数据保存到您的盘镜中">
@@ -81,11 +81,11 @@
 </html>
 <script src="https://www.lingyuzhao.top/js/lib/axios.min.js"></script>
 <script src="https://www.lingyuzhao.top/js/lib/jsZip/jszip.min.js"></script>
-<script src="https://www.lingyuzhao.top/js/diskMirror.js" type="application/javascript"></script>
 <script src="https://www.lingyuzhao.top/js/lib/joker_box_pop_up/js/joker_box_pop_up.js"
         type="application/javascript"></script>
 <script src="https://www.lingyuzhao.top/LS-WebFront/js/utils_io.js"></script>
 <script src="https://www.lingyuzhao.top/LS-WebFront/js/progressBar.js"></script>
+<script src="js/diskMirror.min.js" type="application/javascript"></script>
 <script src="js/conf/indexConfig.js"></script>
 <script src="js/DiskMirrorFront.js" type="application/javascript"></script>
 <script src="js/FileExplorer.js" type="application/javascript"></script>

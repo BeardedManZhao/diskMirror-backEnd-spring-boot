@@ -6,6 +6,9 @@ function transferDeposit() {
         const fileName = prompt("请输入您要转存的文件在盘镜中的名字");
         if (fileName) {
             jokerBoxPopUp.show("转存任务已提交，转存表中可查队列信息哦!")
+            if (!isShowTransferDeposit_fileList_table){
+                showTransferDeposit_fileList_table(document.getElementById("showTransferDeposit_fileList_table_button"));
+            }
             diskMirror.transferDeposit(
                 {
                     userId: userId,
@@ -139,7 +142,6 @@ window.onload = function () {
             },
             (e) => {
                 progressBar.setProgressByValue(0, 'linear-gradient(to right, rgba(255, 255, 255, 0.5), #8c00ff)')
-                progressBar.setProgressByValue(124 << 10 << 10, 128 << 10 << 10, 'linear-gradient(to right, rgba(255, 255, 255, 0.5), #8c00ff)')
                 if ('res' in e) {
                     if (e['res'].endsWith("不可读!!!")) {
                         // 这里代表用户是第一次使用 盘镜 所以可能没有目录 但并不代表是发生了错误!!!
@@ -179,6 +181,8 @@ window.onload = function () {
                             fsList.setPath(searchParams[searchParams.length - 1]);
                         }
                         return;
+                    } else {
+                        progressBar.setProgressByValue(124 << 10 << 10, 128 << 10 << 10, 'linear-gradient(to right, rgba(255, 255, 255, 0.5), #8c00ff)');
                     }
                     console.error(e);
                     new FS_List('fileName', [
