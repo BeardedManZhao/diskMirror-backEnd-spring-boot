@@ -1,8 +1,31 @@
+// 首先搜索当前是否有 cookie 叫做 ip_value ，如果有就直接使用，如果没有就弹出一个输入框让用户输入
 const indexConfig = {
     // 服务器地址
-    server: "https://diskMirror.lingyuzhao.top/DiskMirrorBackEnd",
+    server: undefined,
     // 空间类型
     spaceType: "Binary",
     // 盘镜 服务器所处的域
-    domain: "lingyuzhao.top",
+    domain: undefined,
 }
+
+// 获取完整的URL
+const url = window.location.href;
+
+// 解析URL
+const parser = document.createElement('a');
+parser.href = url;
+
+// 获取协议
+const protocol = parser.protocol;
+
+// 获取主机地址
+const host = parser.hostname;
+
+// 获取端口号
+const port = parser.port;
+
+// 输出结果
+console.log("协议: " + protocol);
+console.log("主机地址: " + host);
+console.log("端口号: " + port);
+indexConfig.server = protocol + '//' + host + ':' + port;
