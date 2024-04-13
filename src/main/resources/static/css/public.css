@@ -149,6 +149,7 @@ input:focus {
 
 .load-icon {
     display: inline-block;
+    color: #00b682;
     /* 应用动画到 .load-icon 类 */
     animation: rotateText 2s linear infinite;
 }

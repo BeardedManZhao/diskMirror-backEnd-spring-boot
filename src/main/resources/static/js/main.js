@@ -205,12 +205,12 @@ window.onload = function () {
             statusBarElement.addEventListener("click", function (){
                 if (statusBarElement.style.color === 'red'){
                     // 代表停止 在这里重新连接
-                    diskMirror = new DiskMirror(indexConfig.server);
-                    jokerBoxPopUp.show("正在重新连接服务器...")
+                    diskMirror.setController('/FsCrud');
+                    jokerBoxPopUp.show("正在重新连接服务器...");
                 } else {
                     // 代表启动 在这里断开连接
-                    diskMirror.setController("---------------")
-                    jokerBoxPopUp.show("正在断开服务器连接...")
+                    diskMirror.setController("---------------");
+                    jokerBoxPopUp.show("正在断开服务器连接...");
                 }
             })
         }

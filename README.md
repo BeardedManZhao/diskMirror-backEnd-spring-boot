@@ -56,12 +56,23 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 您还可以直接使用此项目的前端界面来进行操作！
 
+## 更多说明
+
+### 前端组件集成方式
+
+> 这里的说明是针对开发者/想要修改 diskMirror前端界面的用户所写的，若无此类需求，可以直接跳过这里哦！
+
+[diskMirror-front](https://github.com/BeardedManZhao/diskMirror-front.git) 项目做为此项目的前端组件，融合方式如下所示
+```
+直接将前端项目源码中的 web 目录粘贴到项目 static 目录中，并使用项目 /conf/indexConfig.js 覆盖 static/conf/indexConfig.js 中的配置文件即可
+```
+
 ## 更新日志
 
 ### 2024.04.13 开始开发
 
 - 优化了前端代码
-- 优化默认配置 
+- 优化默认配置，加上了缓存和表单限设置
 
 ### 2024.04.12
 
