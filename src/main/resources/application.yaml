@@ -12,12 +12,43 @@ disk-mirror:
   # 返回结果的key 返回结果中 结果状态的字段名字
   res-key: "res"
   # 协议前缀，默认为http 不同协议前缀有不同的意义，用于拼接 url
-  protocol-prefix: "http://localhost:80/"
+  protocol-prefix: ""
   # 参数 可能会派上用场，在不同的适配器中有不同的实现
   params: { }
   # 用户磁盘配额 每个盘镜空间的磁盘最大空间数值，单位是字节
-  user-disk-mirror-space-quota: 134217728
+  user-disk-mirror-space-quota: 234217728
   # 安全密钥
   secure-key: ""
   # 指定的几个用户的空间对应的容量
   space-max-size: { }
+
+# spring 相关配置
+spring:
+  mvc:
+    resources:
+      cache:
+        # 设置缓存时间 这里是以秒为单位 代表的 1 小时
+        period: 3600
+        # cachecontrol 具有更多的配置，其中也包括 period 但是叫做 max-age 并且 通过 cachecontrol 配置的优先级更高
+        # 也就是说 在这里配置最后会直接覆盖掉 cache.period
+        # 一般来说 需要更详细的配置就需要在这里操作
+        cachecontrol:
+          # 设置缓存的过期时间 这是告诉浏览器此资源缓存 7200 秒
+          max-age: 7200
+        # 配置资源的对比策略，这里是使用的最后一次修改的时间
+        # 这个配置项在 spring 5.2.0 之后才支持
+        # 如果不配置此选项 默认的策略是 Last-Modified
+        # Last-Modified 的策略是根据资源的最后修改时间来判断资源是否被修改过
+        # 如果资源被修改过 则会返回 304 状态码
+        # 如果资源没有被修改过 则会返回 200 状态码
+        # 但是 Last-Modified 的策略存在一个问题，就是如果资源的最后修改时间被修改过，那么资源的最后修改时间也会被修改，这样就会导致资源的最后修改时间永远是当前时间。
+        # 这个配置项默认是 true
+        use-last-modified: true
+  # 文件上传相关配置
+  servlet:
+    # 文件上传相关配置
+    multipart:
+      # 最大文件大小
+      max-file-size: 1024MB
+      # 最大请求大小
+      max-request-size: 1030MB

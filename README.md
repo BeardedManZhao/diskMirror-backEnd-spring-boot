@@ -58,6 +58,11 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
+### 2024.04.13 开始开发
+
+- 优化了前端代码
+- 优化默认配置 
+
 ### 2024.04.12
 
 - 集成了前端项目

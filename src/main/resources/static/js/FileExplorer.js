@@ -292,7 +292,7 @@ class Checkbox {
         a43.innerText = "预览";
         a43.addEventListener('click', () => {
             if (dataObj.isDir) {
-                jokerBoxPopUp.show('此项目是一个目录,无法预览!');
+                td0.click();
             } else {
                 this.previewClick(dataObj);
             }

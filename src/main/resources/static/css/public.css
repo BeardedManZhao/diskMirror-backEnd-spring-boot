@@ -152,3 +152,15 @@ input:focus {
     /* 应用动画到 .load-icon 类 */
     animation: rotateText 2s linear infinite;
 }
+
+.status_bar{
+    background-color: rgba(0, 0, 0, 0.72);
+    padding: 10px;
+    border-radius: 50%;
+    font-weight: bolder;
+}
+
+.status_bar:active {
+    color: #cccccc;
+    background-color: #000000;
+}

@@ -26,17 +26,18 @@
         <div>
             <img alt="logo" class="icon-navigation" src="image/logo.png">
         </div>
-        <div id="show_area" style="text-align: center">diskMirror-front 1.0.2</div>
+        <div id="show_area" style="text-align: center">diskMirror-front 1.0.3</div>
         <div class="button_list1">
             <button class="item_Button" onclick="window.open('index.html')">新界面</button>
-            <button class="item_Button" id="showTransferDeposit_fileList_table_button" onclick="showTransferDeposit_fileList_table(this);"
+            <button class="item_Button" id="showTransferDeposit_fileList_table_button"
+                    onclick="showTransferDeposit_fileList_table(this);"
                     title="查看当前正在转存的任务"> 转存表
             </button>
             <button class="item_Button" onclick="transferDeposit()" title="您可以将某个链接中的数据保存到您的盘镜中">
                 转存
             </button>
             <button class="item_Button" onclick="document.getElementById('fileUpload').click()"
-                    title="您可以将某个文件上传到您的盘镜中"> 上传
+                    title="您可以将某个文件上传到您的盘镜中,如果要上传目录可以让目录压缩为war文件！"> 上传
             </button>
             <button class="item_Button" onclick="reloadFsPath()"> 刷新</button>
             <button class="item_Button" onclick="mkdir()"> 创目录</button>
@@ -71,6 +72,7 @@
         <label>
             <input class="input" id="diskMirrorSearch" placeholder=" 搜索文件">
         </label>
+        <a class="status_bar" href="#"></a>
     </div>
     <!--    <div class="div6"></div>-->
     <!--    <div class="div7"></div>-->

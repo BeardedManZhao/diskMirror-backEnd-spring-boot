@@ -64,3 +64,7 @@ body {
 .parent > .div9 {
     grid-area: 1 / 5 / 2 / 6;
 }
+
+.status_bar {
+    float: right;
+}

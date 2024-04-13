@@ -92,7 +92,7 @@ public class DiskMirrorMAIN implements WebMvcConfigurer {
                                 <dependency>
                                     <groupId>io.github.BeardedManZhao</groupId>
                                     <artifactId>diskMirror-spring-boot-starter</artifactId>
-                                    <version>1.0.1</version>
+                                    <version>1.0.2</version>
                                 </dependency>
                         
                                 <!-- diskMirror 的后端服务器依赖 会自动的使用 diskMirror starter 获取到的适配器 -->
