@@ -348,7 +348,12 @@ class FS_List {
                     this.setPath(p);
                 }
             },
-            previewClick);
+            f => {
+                const fileName = f.fileName;
+                f.fileName = this.#path + f.fileName;
+                previewClick(f);
+                f.fileName = fileName;
+            });
         if (pathInput !== undefined) {
             this.pathInput = pathInput;
             let fsList = this;
