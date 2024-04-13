@@ -38,7 +38,7 @@
 </div>
 <div class="nav_pc">
     <div class="button_list0">
-        <button class="item_Button">点击下载!</button>
+        <button class="item_Button download_button">点击下载!</button>
         <button class="item_Button" onclick="window.open('index.html')">前往主页!</button>
     </div>
 </div>
@@ -73,7 +73,8 @@
             document.querySelector('audio').hidden = false;
         } else {
             document.querySelector('button').innerText = `不支持预览 *${searchParamType} 点击下载!`
-            document.querySelector('button').addEventListener('click', () => window.open(searchParam))
         }
+
+        document.querySelector('.download_button').addEventListener('click', () => window.open(searchParam))
     }
 </script>
