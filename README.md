@@ -2,9 +2,13 @@
 
 diskMirror 后端服务器的 SpringBoot 版本，此版本中拓展了 DiskMirrorBackEnd，是一个完全的SpringBoot项目！
 
-## 我如何使用？
+## 我如何部署与配置
 
-### 部署与配置
+### docker 部署
+
+您可以访问 [diskMirror-docker](https://github.com/BeardedManZhao/diskMirror-docker.git) 项目来了解有关 docker 部署的操作，此操作更加简单！
+
+### Linux/Windows 直接部署
 
 您只需要将此项目源码克隆，然后修改配置文件即可，下面是配置文件的模板。
 
@@ -34,7 +38,7 @@ disk-mirror:
   space-max-size: { }
 ```
 
-配置完毕之后，您只需要将 MAIN 方法启动即可。
+配置完毕之后，您只需要将 MAIN 方法启动。
 
 当然，您也可以直接在启动参数中设置配置文件的使用，下面展示的就是使用 Java 命令启动 SpringBoot
 包的语法，其中包含两个路径，第一个是配置文件的路径，第二个是 SpringBoot 包的路径，这样就可以实现让
@@ -48,13 +52,17 @@ SpringBoot 自动加载您写好的配置文件。
 java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/xxx/diskMirror-backEnd-spring-boot-1.0-SNAPSHOT.jar data 跨域主机1,跨域主机2,...
 ```
 
-### 我如何使用其中的服务？
+## 我如何使用其中的服务？
 
 此项目是继承于 diskMirrorBackEnd 项目的，因此所有的服务使用方法与 DiskMirrorBackEnd
-中是一样的，您可以 [点击这里前往 diskMirrorBackEnd](https://www.lingyuzhao.top/?/linkController=/articleController&link=88968287)
+中是一样的，项目中的 diskMirror 脚本可以帮助您直接操作服务器，在 `2024.04.12` 之后发布的版本中可以使用 WEBUI 操作
+
+有关更多详细信息，您可以 [点击这里前往 diskMirrorBackEnd](https://www.lingyuzhao.top/?/linkController=/articleController&link=88968287)
 的文档进行查看。
 
-您还可以直接使用此项目的前端界面来进行操作！
+## WEBUI 示例
+
+
 
 ## 更多说明
 
@@ -69,7 +77,7 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
-### 2024.04.25 开始开发新版本
+### 2024.04.25
 
 - 集成 1.0.5 的前端代码，能够支持文本数据的在线编辑！
 
@@ -119,4 +127,5 @@ diskMirror SpringBoot 版本首次发布，详情请查看：https://github.com/
 - diskMirror starter SpringBoot：https://github.com/BeardedManZhao/diskMirror-spring-boot-starter.git
 - diskMirror 后端服务器版本（MVC）：https://github.com/BeardedManZhao/DiskMirrorBackEnd.git
 - diskMirror 后端服务器版本（SpringBoot）：https://github.com/BeardedManZhao/diskMirror-backEnd-spring-boot.git
+- diskMirror 后端服务器版本（SpringBoot-docker）：https://github.com/BeardedManZhao/diskMirror-docker.git
 - diskMirror Java API 版本：https://github.com/BeardedManZhao/DiskMirror.git
