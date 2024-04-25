@@ -2,5 +2,10 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/editor.md" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/editor.md/editormd.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/editor.md/lib/marked.min.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/editor.md/lib/prettify.min.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/js/jquery-latest.js" charset="GBK" />
   </component>
 </project>
