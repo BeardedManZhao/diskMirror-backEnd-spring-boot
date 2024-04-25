@@ -4,13 +4,17 @@ diskMirror 后端服务器的 SpringBoot 版本，此版本中拓展了 DiskMirr
 
 ## 我如何部署与配置
 
-### docker 部署
+### docker 方式部署 diskMirror【省去了 JDK 和系统相关的操作只需要修改配置，过程中需要等待程序自动编译】
+
+![20240425173711](https://github.com/BeardedManZhao/diskMirror-backEnd-spring-boot/assets/113756063/93b519e7-357e-4621-9127-d4edbfd47b3a)
 
 您可以访问 [diskMirror-docker](https://github.com/BeardedManZhao/diskMirror-docker.git) 项目来了解有关 docker 部署的操作，此操作更加简单！
 
-### Linux/Windows 直接部署
+### Linux/Windows 方式直接部署【省去了 docker 镜像编译，需要单独的配置服务器环境】
 
-您只需要将此项目源码克隆，然后修改配置文件即可，下面是配置文件的模板。
+![image](https://github.com/BeardedManZhao/diskMirror-backEnd-spring-boot/assets/113756063/e1455546-a602-48d4-99ef-c85234ae4f93)
+
+您只需要从 包仓库 中下载 jar 并修改配置文件，然后根据此页面的引导进行安装和启动即可，下面是配置文件的模板。
 
 ```yaml
 disk-mirror:
