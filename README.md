@@ -62,6 +62,9 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## WEBUI 示例
 
+![image](https://github.com/BeardedManZhao/diskMirror-backEnd-spring-boot/assets/113756063/07f0975c-e544-4298-a7be-c7eba8983f0b)
+
+![image](https://github.com/BeardedManZhao/diskMirror-backEnd-spring-boot/assets/113756063/24dd3537-3e4d-43b1-b1ec-d86790a9c277)
 
 
 ## 更多说明
