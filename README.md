@@ -68,7 +68,7 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ![image](https://github.com/BeardedManZhao/diskMirror-backEnd-spring-boot/assets/113756063/07f0975c-e544-4298-a7be-c7eba8983f0b)
 
-![image](https://github.com/BeardedManZhao/diskMirror-backEnd-spring-boot/assets/113756063/24dd3537-3e4d-43b1-b1ec-d86790a9c277)
+![image](https://private-user-images.githubusercontent.com/113756063/325888391-d1f4c15a-193c-40d0-ae0c-9c3fb3a499bb.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTQxMTczNzgsIm5iZiI6MTcxNDExNzA3OCwicGF0aCI6Ii8xMTM3NTYwNjMvMzI1ODg4MzkxLWQxZjRjMTVhLTE5M2MtNDBkMC1hZTBjLTljM2ZiM2E0OTliYi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNDI2JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDQyNlQwNzM3NThaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1mODc5NjBjN2QwYmI3YmYwNGVjNmE1Mjg4MmI5ZjQ4NjA2MTRjMmUwOTc4ZTgzZDg2NWNmM2MzM2MzOTU0NzQ0JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.tHkpSkdSkNQLBW-Ih6Sr5nsRVlZo61NiRRAdB6PSxVM)
 
 
 ## 更多说明
@@ -83,6 +83,11 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 ```
 
 ## 更新日志
+
+### 2024.04.26
+
+- 集成 文件进度条 API 支持 `getAllProgressBar` 服务，能够获取到指定空间的所有的进度条信息。
+- 集成 diskMirror 1.2.2 版本
 
 ### 2024.04.25
 

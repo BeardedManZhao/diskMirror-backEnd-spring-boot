@@ -16,7 +16,7 @@ disk-mirror:
   # 参数 可能会派上用场，在不同的适配器中有不同的实现
   params: { }
   # 用户磁盘配额 每个盘镜空间的磁盘最大空间数值，单位是字节
-  user-disk-mirror-space-quota: 234217728
+  user-disk-mirror-space-quota: 1073741824
   # 安全密钥
   secure-key: ""
   # 指定的几个用户的空间对应的容量

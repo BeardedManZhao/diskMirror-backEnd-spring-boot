@@ -465,6 +465,53 @@ class DiskMirror {
     }
 
     /**
+     * 获取指定空间的所有的进度条
+     * @param userId {int|string} 指定要获取到的文件进度数据对应的空间id
+     * @param okFun {function} 操作成功之后的回调函数 输入是被文件进度的json对象
+     * @param errorFun {function} 操作失败之后的回调函数 输入是错误信息
+     * @param checkFun {function} 操作前的检查函数 输入是请求参数对象，如果返回的是一个false 则代表检查失败不继续操作
+     */
+    getAllProgressBar(userId, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e), checkFun = undefined){
+        if (userId === undefined || okFun === undefined) {
+            const err = "您必须要输入 userId 和 okFun 参数才可以进行文件对象的获取！";
+            if (errorFun !== undefined) {
+                errorFun(err);
+            } else {
+                console.error(err);
+            }
+            return
+        }
+        if (checkFun !== undefined && !checkFun(userId)) {
+            return;
+        }
+        axios.defaults.withCredentials = true;
+        // 开始获取
+        axios(
+            {
+                method: 'post',
+                url: this.diskMirrorUrl + this.getController() + '/getAllProgressBar',
+                params: {
+                    id: userId
+                }
+            }
+        ).then(function (res) {
+            // 处理成功
+            if (okFun !== undefined) {
+                okFun(res.data);
+            } else {
+                console.info(res.data);
+            }
+        }).catch(function (err) {
+            // 处理错误
+            if (errorFun !== undefined) {
+                errorFun(err);
+            } else {
+                console.error(err);
+            }
+        });
+    }
+
+    /**
      * 向后端中查询文件转存情况
      * @param params {{
      *      userId: int,

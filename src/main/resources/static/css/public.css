@@ -147,11 +147,40 @@ input:focus {
     }
 }
 
+/* 定义名为 "rotateText_2" 的关键帧动画 */
+@keyframes rotateText_2 {
+    0% {
+        transform: rotate(0deg);
+    }
+    30% {
+        transform: rotate(0deg); /* 到达50%时旋转180度 */
+    }
+    50% {
+        transform: rotate(180deg); /* 到达50%时旋转180度 */
+    }
+    50.5% { /* 添加额外的关键帧，稍过50%以避免瞬间跳转 */
+        transform: rotate(180deg);
+    }
+    70% {
+        transform: rotate(180deg); /* 在50%至70%之间保持静止 */
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .load-icon {
     display: inline-block;
     color: #00b682;
     /* 应用动画到 .load-icon 类 */
     animation: rotateText 2s linear infinite;
+}
+
+.load-icon-2 {
+    display: inline-block;
+    color: #00b682;
+    /* 应用动画到 .load-icon 类 */
+    animation: rotateText_2 5s linear infinite;
 }
 
 .status_bar {

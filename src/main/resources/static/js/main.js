@@ -47,17 +47,18 @@ let isShowTransferDeposit_fileList_table = false;
 
 function showTransferDeposit_fileList_table(b) {
     if (isShowTransferDeposit_fileList_table) {
-        document.querySelectorAll("#transferDeposit_fileList_table").forEach((element) => element.style.display = 'none');
+        document.querySelectorAll("#transferDeposit_fileList_table,#upload_fileList_table").forEach((element) => element.style.display = 'none');
         b.innerText = ' 转存表';
         isShowTransferDeposit_fileList_table = false;
     } else {
-        document.querySelectorAll("#transferDeposit_fileList_table").forEach((element) => element.style.display = 'table');
+        document.querySelectorAll("#transferDeposit_fileList_table,#upload_fileList_table").forEach((element) => element.style.display = 'table');
         b.innerText = ' 转存表'
         isShowTransferDeposit_fileList_table = true;
     }
 }
 
-const progressBar = new ProgressBar(document.querySelector(".progress-bar"), (now, max) => `您的盘镜空间使用量为：${DiskMirrorFront.formatBytes(now)}/${DiskMirrorFront.formatBytes(max)}；占比为：${(now / max * 100).toFixed(2)}%`);
+const progressBar = new ProgressBar(document.querySelector(".all-progress-bar"), (now, max) => `您的盘镜空间使用量为：${DiskMirrorFront.formatBytes(now)}/${DiskMirrorFront.formatBytes(max)}；占比为：${(now / max * 100).toFixed(2)}%`);
+
 let diskMirror = new DiskMirror(indexConfig.server);
 // 获取到id 和 口令
 const searchParams1 = [DiskMirrorFront.getLatestCookieValue('diskMirror_server_pass')]
@@ -201,6 +202,7 @@ window.onload = function () {
             })
 
         const transferDeposit_fileList_table = document.querySelector("#transferDeposit_fileList_table tbody");
+        const upload_fileList_table = document.querySelector("#upload_fileList_table tbody");
 
         // 获取状态灯
         const status_bar = document.getElementsByClassName("status_bar");
@@ -219,8 +221,25 @@ window.onload = function () {
             })
         }
 
+        // 进度字典
+        const progressDict = {};
+
+        // 设置字典自动清理 1分钟清理一次
+        setInterval(() => DiskMirrorFront.clearObject(progressDict), 60000)
+
         // 转存查询
         setInterval(() => {
+            const errorFun = (_) => {
+                document.querySelector("body").className = 'errorBody';
+                for (let statusBarElement of status_bar) {
+                    statusBarElement.style.color = 'red';
+                    statusBarElement.title = '目前无法获取到与服务器的通信！';
+                }
+                if (isShowTransferDeposit_fileList_table) {
+                    jokerBoxPopUp.show('无法与转存状态服务连接，请检查网络或diskMirror服务器版本是否 >= 1.2.0')
+                }
+            }
+            // 转存表
             diskMirror.transferDepositStatus({userId: userId, type: type}, (res) => {
                 const date = DiskMirrorFront.getDate(new Date());
                 document.querySelector("body").className = '';
@@ -246,16 +265,45 @@ window.onload = function () {
                     tr.appendChild(td1);
                     transferDeposit_fileList_table.appendChild(tr);
                 }
-            }, (_) => {
-                document.querySelector("body").className = 'errorBody';
-                for (let statusBarElement of status_bar) {
-                    statusBarElement.style.color = 'red';
-                    statusBarElement.title = '目前无法获取到与服务器的通信！';
+            }, errorFun);
+            if (!isShowTransferDeposit_fileList_table) {
+                // 如果看不到转存和进度表 就没必要获取进度表
+                return;
+            }
+            // 进度表
+            diskMirror.getAllProgressBar(userId, (res) => {
+                upload_fileList_table.innerHTML = '';
+                for (const fileName in res) {
+                    const p = res[fileName];
+                    const progressDictElement = progressDict[fileName];
+                    if (progressDictElement) {
+                        upload_fileList_table.appendChild(progressDictElement[0])
+                        progressDictElement[1].setProgressByValue(p['count'], p['maxCount'], 'linear-gradient(to right, rgba(255, 255, 255, 0.5), #8c00ff)', 'linear-gradient(to right, rgba(255, 255, 255, 0.5), #00ff00)')
+                    } else {
+                        const tr = document.createElement("tr");
+                        tr.className = "row0";
+                        const td0 = document.createElement("td");
+                        const span0 = document.createElement("span");
+                        span0.innerText = '';
+                        span0.className = 'load-icon'
+                        const span1 = document.createElement("span");
+                        span1.innerText = ' ' + fileName;
+                        td0.appendChild(span0);
+                        td0.appendChild(span1);
+                        tr.appendChild(td0);
+                        // 获取进度对象 进度对象示例：{"diskMirror-1.2.1-javadoc.jar":{"count":98304,"maxCount":214246.0,"progressId":"diskMirror-1.2.1-javadoc.jar","spaceId":"1"}}
+                        const htmlDivElement = document.createElement("div");
+                        htmlDivElement.className = 'progress-bar'
+                        const td1 = document.createElement("td");
+                        td1.appendChild(htmlDivElement);
+                        tr.appendChild(td1);
+                        progressDict[fileName] = [tr, new ProgressBar(htmlDivElement, (now, max) => `${fileName} 上传进度为：${DiskMirrorFront.formatBytes(now)}/${DiskMirrorFront.formatBytes(max)}；占比为：${(now / max * 100).toFixed(2)}%`)];
+                        progressDict[fileName][1].setProgressByValue(p['count'], p['maxCount'], 'linear-gradient(to right, rgba(255, 255, 255, 0.5), #8c00ff)', 'linear-gradient(to right, rgba(255, 255, 255, 0.5), #00ff00)')
+                        upload_fileList_table.appendChild(tr);
+                    }
                 }
-                if (isShowTransferDeposit_fileList_table) {
-                    jokerBoxPopUp.show('无法与转存状态服务连接，请检查网络或diskMirror服务器版本是否 >= 1.2.0')
-                }
-            });
+            }, () => {
+            })
         }, 5000)
 
         document.querySelector("#diskMirrorBackPath").addEventListener("click", () => fsList.toBackPath());
@@ -271,6 +319,9 @@ window.onload = function () {
         })
 
         document.getElementById("fileUpload").addEventListener("change", function (e) {
+            if (!isShowTransferDeposit_fileList_table) {
+                showTransferDeposit_fileList_table(document.getElementById("showTransferDeposit_fileList_table_button"));
+            }
             const files = e.target.files;
             // 获取到当前层级
             const element = document.querySelector("#diskMirrorPathInput").value;

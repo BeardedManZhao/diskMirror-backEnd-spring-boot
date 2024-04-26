@@ -3,8 +3,12 @@ body {
     height: 100%;
 }
 
-#transferDeposit_fileList_table {
+#transferDeposit_fileList_table, #upload_fileList_table {
     display: none;
+}
+
+#upload_fileList_table .progress-bar {
+    height: 1em;
 }
 
 .parent {

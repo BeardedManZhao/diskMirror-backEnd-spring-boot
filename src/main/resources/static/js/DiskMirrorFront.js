@@ -194,4 +194,16 @@ class DiskMirrorFront {
     static videoStr(src, style = 'width:50vw') {
         return "<video src='" + src + "' style='" + style + "' controls/>";
     }
+
+    /**
+     * 清空对象
+     * @param obj 需要被清空的对象
+     */
+    static clearObject(obj) {
+        for (let key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                delete obj[key];
+            }
+        }
+    }
 }

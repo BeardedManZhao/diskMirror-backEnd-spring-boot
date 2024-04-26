@@ -14,7 +14,8 @@
 <body>
 <div class="parent">
     <div class="div1">
-        <div class="progress-bar" style="display:inline-block; width: 69%; height: 20%; transform: translateY(50%)">
+        <div class="all-progress-bar progress-bar"
+             style="display:inline-block; width: 69%; height: 20%; transform: translateY(50%)">
 
         </div>
         <label>
@@ -26,7 +27,11 @@
         <div>
             <img alt="logo" class="icon-navigation" src="image/logo.png">
         </div>
-        <div id="show_area" title="diskMirror-front 版本：点击查看前端界面历史包" onclick="window.open('https://github.com/BeardedManZhao/diskMirror-front/releases')" style="text-align: center"> 1.0.5</div>
+        <div id="show_area"
+             style="text-align: center"
+             title="diskMirror-front 版本：点击查看前端界面历史包">
+            <div onclick="window.open('https://github.com/BeardedManZhao/diskMirror-front/releases')"><span class="load-icon-2"></span> <span>1.0.6</span></div>
+        </div>
         <div class="button_list1">
             <button class="item_Button" onclick="window.open('index.html')">新界面</button>
             <button class="item_Button" id="showTransferDeposit_fileList_table_button"
@@ -59,12 +64,21 @@
 
             </tbody>
         </table>
+        <table class="wide-table" id="upload_fileList_table">
+            <thead>
+            <tr>
+                <th title="保存到盘镜中的文件的名字">写入文件的名称</th>
+                <th title="文件上传进度">上传任务的进度</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
         <table class="wide-table" id="fileList_table">
 
         </table>
-        <table class="wide-table" id="upload_fileList_table">
 
-        </table>
     </div>
     <div class="div4">
         <a class="okClick" href="#" id="diskMirrorBackPath"></a>

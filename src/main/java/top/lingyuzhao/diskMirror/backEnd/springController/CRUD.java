@@ -105,6 +105,19 @@ public interface CRUD {
     String transferDepositStatus(HttpServletRequest httpServletRequest);
 
     /**
+     * 获取某个空间的所有进度条，这些进度条代表的往往都是正在处于上传状态的文件的操作进度对象
+     * Retrieves all progress bars for a given space, typically representing ongoing upload operations for files within that space.
+     *
+     * @param id 指定的空间的 id
+     *           A JSON collection of progress bar objects, where the keys correspond to progress scales.
+     * @return 进度条对象的 json 集合 其中 key 是进度id value 是进度对象
+     * The unique identifier of the specified space.
+     */
+    @RequestMapping("/getAllProgressBar")
+    @ResponseBody
+    String getAllProgressBar(String id);
+
+    /**
      * 创建一个文件目录的后端处理函数
      *
      * @param httpServletRequest 来自前端的请求对象

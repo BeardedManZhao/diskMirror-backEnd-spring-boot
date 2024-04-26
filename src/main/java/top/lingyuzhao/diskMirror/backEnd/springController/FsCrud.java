@@ -267,6 +267,11 @@ public class FsCrud implements CRUD {
         }
     }
 
+    @Override
+    public String getAllProgressBar(String id) {
+        return adapter.getAllProgressBar(id).toString();
+    }
+
 
     /**
      * 创建一个文件目录的后端处理函数
