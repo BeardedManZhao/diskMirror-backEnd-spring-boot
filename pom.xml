@@ -46,7 +46,7 @@
         <dependency>
             <groupId>io.github.BeardedManZhao</groupId>
             <artifactId>diskMirror</artifactId>
-            <version>1.2.2</version>
+            <version>1.2.3</version>
         </dependency>
 
         <!-- 如果需要对接 HDFS 才导入 如果不需要就不导入此依赖 -->

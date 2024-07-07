@@ -165,4 +165,14 @@ public interface CRUD {
     @RequestMapping("/getUseSize")
     @ResponseBody
     String getUseSize(HttpServletRequest httpServletRequest);
+
+    /**
+     * 将指定的 userId 生成一个新的密钥
+     *
+     * @param httpServletRequest http 的请求对象
+     * @return 操作成功之后返回的结果
+     */
+    @RequestMapping("/setSpaceSk")
+    @ResponseBody
+    String setSpaceSk(HttpServletRequest httpServletRequest);
 }

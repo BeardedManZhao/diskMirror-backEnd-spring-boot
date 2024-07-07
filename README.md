@@ -85,6 +85,10 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
+### 2024.07.07 
+
+- 尝试集成 `setSpaceSk` 服务，此服务在 1.2.4 版本中不具备安全性，将在后续尝试继续集成此服务！
+
 ### 2024.04.26
 
 - 集成 文件进度条 API 支持 `getAllProgressBar` 服务，能够获取到指定空间的所有的进度条信息。
