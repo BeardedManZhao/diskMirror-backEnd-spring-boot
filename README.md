@@ -8,7 +8,8 @@ diskMirror 后端服务器的 SpringBoot 版本，此版本中拓展了 DiskMirr
 
 ![20240425173711](https://github.com/BeardedManZhao/diskMirror-backEnd-spring-boot/assets/113756063/93b519e7-357e-4621-9127-d4edbfd47b3a)
 
-您可以访问 [diskMirror-docker](https://github.com/BeardedManZhao/diskMirror-docker.git) 项目来了解有关 docker 部署的操作，此操作更加简单！
+您可以访问 [diskMirror-docker](https://github.com/BeardedManZhao/diskMirror-docker.git) 项目来了解有关 docker
+部署的操作，此操作更加简单！
 
 ### Linux/Windows 方式直接部署【省去了 docker 镜像编译，需要单独的配置服务器环境】
 
@@ -79,13 +80,19 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 > 这里的说明是针对开发者/想要修改 diskMirror前端界面的用户所写的，若无此类需求，可以直接跳过这里哦！
 
 [diskMirror-front](https://github.com/BeardedManZhao/diskMirror-front.git) 项目做为此项目的前端组件，融合方式如下所示
+
 ```
 直接将前端项目源码中的 web 目录粘贴到项目 static 目录中，并使用项目 /conf/indexConfig.js 覆盖 static/conf/indexConfig.js 中的配置文件即可
 ```
 
 ## 更新日志
 
-### 2024.07.07 
+### 2024.08.31
+
+- 优化了文件上传逻辑，可避免由于文件数据上传导致的内存溢出！
+- 集成了新版本的 DiskMirror-Front
+
+### 2024.07.07
 
 - 尝试集成 `setSpaceSk` 服务，此服务在 1.2.4 版本中不具备安全性，将在后续尝试继续集成此服务！
 

@@ -3,55 +3,57 @@ package top.lingyuzhao.diskMirror.backEnd.springController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 具有增删改查功能的控制器接口
  */
 public interface CRUD {
-
     /**
      * 增加函数
      *
-     * @param httpServletRequest 请求对象
+     * @param httpServletRequest 请求对象 如果从这里获取 前端就是这样的：formData.append('这里是 part 的名字', JSON.stringify(params), "params");
+     * @param params             使用 spring 操作的 params 前端是这样的：formData.append('params', JSON.stringify(params), "这里是 part 的名字");
+     * @param file               使用 spring 操作的 file 前端是这样的：formData.append('file', 要上传的文件file, "这里是 part 的名字");
      * @return 返回结果
      */
     @RequestMapping("/add")
     @ResponseBody
-    String add(HttpServletRequest httpServletRequest);
+    String add(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params, @RequestPart("file") MultipartFile file);
 
     /**
      * 删除函数
      *
-     * @param httpServletRequest 请求对象
+     * @param httpServletRequest 请求对象 如果从这里获取 前端就是这样的：formData.append('这里是 part 的名字', JSON.stringify(params), "params");
+     * @param params             使用 spring 操作的 params 前端是这样的：formData.append('params', JSON.stringify(params), "这里是 part 的名字");
      * @return 返回结果
      */
     @RequestMapping("/remove")
     @ResponseBody
-    String remove(HttpServletRequest httpServletRequest);
+    String remove(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
 
     /**
      * 重命名类的函数
      *
-     * @param httpServletRequest 请求对象
+     * @param httpServletRequest 请求对象 如果从这里获取 前端就是这样的：formData.append('这里是 part 的名字', JSON.stringify(params), "params");
+     * @param params             使用 spring 操作的 params 前端是这样的：formData.append('params', JSON.stringify(params), "这里是 part 的名字");
      * @return 返回结果
      */
     @RequestMapping("/reName")
     @ResponseBody
-    String reName(HttpServletRequest httpServletRequest);
+    String reName(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
 
     /**
      * 获取相关操作的函数
      *
-     * @param httpServletRequest 请求对象
+     * @param httpServletRequest 请求对象 如果从这里获取 前端就是这样的：formData.append('这里是 part 的名字', JSON.stringify(params), "params");
+     * @param params             使用 spring 操作的 params 前端是这样的：formData.append('params', JSON.stringify(params), "这里是 part 的名字");
      * @return 返回结果
      */
     @RequestMapping("/getUrls")
     @ResponseBody
-    String get(HttpServletRequest httpServletRequest);
+    String get(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
 
     /**
      * 下载文件的后端处理函数
@@ -75,34 +77,21 @@ public interface CRUD {
                   String fileName, Integer sk
     );
 
+
     /**
      * 将一个 url 地址指向的数据进行转存操作，将 url 指向的文件转存到空间中的指定位置！
      * <p>
      * Transfer the data pointed to by a URL address to a specified location in the space!
      *
-     * @param httpServletRequest 请求对象
+     * @param httpServletRequest 请求对象 如果从这里获取 前端就是这样的：formData.append('这里是 part 的名字', JSON.stringify(params), "params");
+     * @param params             使用 spring 操作的 params 前端是这样的：formData.append('params', JSON.stringify(params), "这里是 part 的名字");
      * @return 转存后的结果
      * <p>
      * Result after transfer
      */
     @RequestMapping("/transferDeposit")
     @ResponseBody
-    String transferDeposit(HttpServletRequest httpServletRequest);
-
-
-    /**
-     * 将一个 url 地址指向的数据进行转存操作，将 url 指向的文件转存到空间中的指定位置！
-     * <p>
-     * Transfer the data pointed to by a URL address to a specified location in the space!
-     *
-     * @param httpServletRequest 请求对象
-     * @return 转存后的结果
-     * <p>
-     * Result after transfer
-     */
-    @RequestMapping("/transferDepositStatus")
-    @ResponseBody
-    String transferDepositStatus(HttpServletRequest httpServletRequest);
+    String transferDeposit(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
 
     /**
      * 获取某个空间的所有进度条，这些进度条代表的往往都是正在处于上传状态的文件的操作进度对象
@@ -118,14 +107,30 @@ public interface CRUD {
     String getAllProgressBar(String id);
 
     /**
+     * 将一个 url 地址指向的数据进行转存操作，将 url 指向的文件转存到空间中的指定位置！
+     * <p>
+     * Transfer the data pointed to by a URL address to a specified location in the space!
+     *
+     * @param httpServletRequest 请求对象 如果从这里获取 前端就是这样的：formData.append('这里是 part 的名字', JSON.stringify(params), "params");
+     * @param params             使用 spring 操作的 params 前端是这样的：formData.append('params', JSON.stringify(params), "这里是 part 的名字");
+     * @return 返回结果
+     * <p>
+     * Result after transfer
+     */
+    @RequestMapping("/transferDepositStatus")
+    @ResponseBody
+    String transferDepositStatus(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
+
+    /**
      * 创建一个文件目录的后端处理函数
      *
-     * @param httpServletRequest 来自前端的请求对象
-     * @return 操作成功之后的返回结果
+     * @param httpServletRequest 请求对象 如果从这里获取 前端就是这样的：formData.append('这里是 part 的名字', JSON.stringify(params), "params");
+     * @param params             使用 spring 操作的 params 前端是这样的：formData.append('params', JSON.stringify(params), "这里是 part 的名字");
+     * @return 返回结果
      */
     @RequestMapping("/mkdirs")
     @ResponseBody
-    String mkdirs(HttpServletRequest httpServletRequest);
+    String mkdirs(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
 
     /**
      * 获取到指定空间的大小
@@ -140,12 +145,13 @@ public interface CRUD {
     /**
      * 设置指定空间的大小，此操作需要提供安全密钥
      *
-     * @param httpServletRequest 请求对象
-     * @return 操作结果
+     * @param httpServletRequest 请求对象 如果从这里获取 前端就是这样的：formData.append('这里是 part 的名字', JSON.stringify(params), "params");
+     * @param params             使用 spring 操作的 params 前端是这样的：formData.append('params', JSON.stringify(params), "这里是 part 的名字");
+     * @return 返回结果
      */
     @RequestMapping("/setSpaceSize")
     @ResponseBody
-    String setSpaceSize(HttpServletRequest httpServletRequest);
+    String setSpaceSize(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
 
     /**
      * 获取 盘镜 后端系统 版本号
@@ -159,20 +165,22 @@ public interface CRUD {
     /**
      * 获取 盘镜 后端系统 已经使用的所有的空间大小。
      *
-     * @param httpServletRequest http 的请求对象
-     * @return 操作成功之后返回的结果
+     * @param httpServletRequest 请求对象 如果从这里获取 前端就是这样的：formData.append('这里是 part 的名字', JSON.stringify(params), "params");
+     * @param params             使用 spring 操作的 params 前端是这样的：formData.append('params', JSON.stringify(params), "这里是 part 的名字");
+     * @return 返回结果
      */
     @RequestMapping("/getUseSize")
     @ResponseBody
-    String getUseSize(HttpServletRequest httpServletRequest);
+    String getUseSize(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
 
     /**
      * 将指定的 userId 生成一个新的密钥
      *
-     * @param httpServletRequest http 的请求对象
-     * @return 操作成功之后返回的结果
+     * @param httpServletRequest 请求对象 如果从这里获取 前端就是这样的：formData.append('这里是 part 的名字', JSON.stringify(params), "params");
+     * @param params             使用 spring 操作的 params 前端是这样的：formData.append('params', JSON.stringify(params), "这里是 part 的名字");
+     * @return 返回结果
      */
     @RequestMapping("/setSpaceSk")
     @ResponseBody
-    String setSpaceSk(HttpServletRequest httpServletRequest);
+    String setSpaceSk(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
 }

@@ -12,6 +12,9 @@
     <link href="https://www.lingyuzhao.top/js/lib/joker_box_pop_up/css/joker_box_pop_up.css" rel="stylesheet">
 </head>
 <body>
+<div hidden id="versionShowDiv">
+    <pre id="versionShow" style="font-family: 'monospace', 'icomoon', serif">⚠ 无法与服务器取得连接 或 服务器版本较低，不支持版本号的获取！</pre>
+</div>
 <div class="parent">
     <div class="div1">
         <div class="all-progress-bar progress-bar"
@@ -25,12 +28,14 @@
     </div>
     <div class="div2 nav_pc">
         <div>
-            <img alt="logo" class="icon-navigation" src="image/logo.png">
+            <img alt="logo" class="icon-navigation" id="bigLogoImage" src="image/logo.png"
+                 title="点击查看diskMirror服务器版本">
         </div>
         <div id="show_area"
              style="text-align: center"
              title="diskMirror-front 版本：点击查看前端界面历史包">
-            <div onclick="window.open('https://github.com/BeardedManZhao/diskMirror-front/releases')"><span class="load-icon-2"></span> <span>1.0.6</span></div>
+            <div onclick="window.open('https://github.com/BeardedManZhao/diskMirror-front/releases')"><span
+                    class="load-icon-2"></span> <span>2.0.0</span></div>
         </div>
         <div class="button_list1">
             <button class="item_Button" onclick="window.open('index.html')">新界面</button>

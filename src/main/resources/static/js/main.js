@@ -1,5 +1,23 @@
 const jokerBoxPopUp = new JokerBox_popUp(document.getElementById("show_area"));
 
+const versionShow = document.querySelector("#versionShow");
+const versionShowDiv = document.querySelector("#versionShowDiv");
+
+/**
+ * 使用内置的弹窗展示文字！
+ * @param showText
+ * @param showMs
+ */
+function showMessage(showText, showMs = 5000) {
+    versionShow.innerText = showText;
+    // 显示信息
+    versionShowDiv.hidden = false;
+    // 5秒钟之后隐藏信息
+    setTimeout(() => versionShowDiv.hidden = true, 5000);
+}
+
+showMessage(" 正在获取服务器连接中...")
+
 function transferDeposit() {
     const s = prompt("请输入您要转存的文件的 url", "https://xxx");
     if (s) {
@@ -161,6 +179,7 @@ window.onload = function () {
                 if (searchParams.length > 0) {
                     fsList.setPath(searchParams[searchParams.length - 1]);
                 }
+                showMessage(" 服务器连接成功！");
             },
             (e) => {
                 progressBar.setProgressByValue(0, 'linear-gradient(to right, rgba(255, 255, 255, 0.5), #8c00ff)')
@@ -221,6 +240,15 @@ window.onload = function () {
             })
         }
 
+        // 设置logo点击查询版本
+        document.querySelector("#bigLogoImage").addEventListener("click", function () {
+            // 版本号
+            diskMirror.getVersion(
+                (v) => showMessage(v),
+                (v) => showMessage("⚠ 无法与服务器取得连接 或 服务器版本较低，不支持版本号的获取！\n更新时间：" + DiskMirrorFront.getDate(new Date()) + "\n错误信息详情：\n" + JSON.stringify(v))
+            );
+        })
+
         // 进度字典
         const progressDict = {};
 
@@ -236,7 +264,8 @@ window.onload = function () {
                     statusBarElement.title = '目前无法获取到与服务器的通信！';
                 }
                 if (isShowTransferDeposit_fileList_table) {
-                    jokerBoxPopUp.show('无法与转存状态服务连接，请检查网络或diskMirror服务器版本是否 >= 1.2.0')
+                    jokerBoxPopUp.show('无法与转存状态服务连接，请检查网络或diskMirror服务器版本是否 >= 1.2.0');
+                    showMessage('⚠ 无法与转存状态服务连接，请检查网络或diskMirror服务器版本是否 >= 1.2.0', 10000);
                 }
             }
             // 转存表
@@ -303,7 +332,7 @@ window.onload = function () {
                     }
                 }
             }, () => {
-            })
+            });
         }, 5000)
 
         document.querySelector("#diskMirrorBackPath").addEventListener("click", () => fsList.toBackPath());

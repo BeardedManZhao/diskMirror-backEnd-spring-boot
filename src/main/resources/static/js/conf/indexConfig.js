@@ -1,4 +1,3 @@
-// 首先搜索当前是否有 cookie 叫做 ip_value ，如果有就直接使用，如果没有就弹出一个输入框让用户输入
 const indexConfig = {
     // 服务器地址
     server: undefined,

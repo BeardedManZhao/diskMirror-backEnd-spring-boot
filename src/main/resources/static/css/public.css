@@ -2,6 +2,10 @@ html {
     height: 100%;
 }
 
+html::-webkit-scrollbar { /* 隐藏 WebKit 浏览器的滚动条 */
+    display: none;
+}
+
 html * {
     font-family: 'icomoon', sans-serif;
 }
@@ -193,4 +197,8 @@ input:focus {
 .status_bar:active {
     color: #cccccc;
     background-color: #000000;
+}
+
+#versionShowDiv {
+    padding: 10px;
 }
