@@ -1,6 +1,6 @@
 
 body {
-    animation: gradientBG 15s ease forwards;
+    animation: gradientBG 15s;
 }
 
 @keyframes show_parent {

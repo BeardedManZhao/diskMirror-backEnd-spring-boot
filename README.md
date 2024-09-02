@@ -87,6 +87,11 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
+### 2024.09.02
+
+- 为 DiskMirror-Front 版本升级到 2.1.0
+- 为 DiskMirror 核心组件版本升级到 1.2.5
+
 ### 2024.08.31
 
 - 优化了文件上传逻辑，可避免由于文件数据上传导致的内存溢出！

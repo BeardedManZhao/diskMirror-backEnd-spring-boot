@@ -56,7 +56,7 @@
         if (isUpdate) {
             fileName_str = searchParams0[searchParams0.length - 1];
         } else {
-            const s1 = prompt("请您为文件起个名字吧！", "/xxx/xxx/Untitled_" + DiskMirrorFront.getDate(new Date()));
+            const s1 = prompt("请您为文件起个名字吧！", "/xxx/xxx/Untitled_" + Date.now() + ".md");
             fileName_str = s1 ? s1 : '未命名文件_' + DiskMirrorFront.getDate(new Date()) + '.md';
         }
         const jokerBoxPopUp = new JokerBox_popUp(document.getElementById("joker"));
@@ -92,7 +92,7 @@
                             userId: userId,
                             type: type1,
                             fileName: fileName_str
-                        }, editor.getMarkdown(), (r) => jokerBoxPopUp.show(r.fileName + " 保存成功！"), (error) => jokerBoxPopUp.show("保存操作出现了问题!请稍后再试吧！" + error));
+                        }, new Blob([editor.getMarkdown()], {type: 'text/plain'}), (r) => jokerBoxPopUp.show(r.fileName + " 保存成功！"), (error) => jokerBoxPopUp.show("保存操作出现了问题!请稍后再试吧！" + error));
                     },
                     (error) => jokerBoxPopUp.show("覆写操作出现了问题!请稍后再试吧！" + error)
                 )
@@ -101,7 +101,7 @@
                         userId: userId,
                         type: type,
                         fileName: fileName_str
-                    }, editor.getMarkdown(), (r) => {
+                    }, new Blob([editor.getMarkdown()], {type: 'text/plain'}), (r) => {
                         jokerBoxPopUp.show(r.fileName + " 保存成功！稍后自动跳转到文件管理器！");
                         setTimeout(() => {
                             window.location.href = `FileExplorer.html?server_id=${userId}&path=/`

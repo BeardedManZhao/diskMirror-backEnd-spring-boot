@@ -5,15 +5,52 @@ const versionShowDiv = document.querySelector("#versionShowDiv");
 
 /**
  * 使用内置的弹窗展示文字！
- * @param showText
- * @param showMs
+ * @param showText 被展示的文字
+ * @param showMs 自动隐藏的秒数
+ * @param autoHidden 是否需要自动隐藏
  */
-function showMessage(showText, showMs = 5000) {
+function showMessage(showText, showMs = 5000, autoHidden = true) {
     versionShow.innerText = showText;
     // 显示信息
     versionShowDiv.hidden = false;
-    // 5秒钟之后隐藏信息
-    setTimeout(() => versionShowDiv.hidden = true, 5000);
+    // showMs钟之后隐藏信息
+    if (autoHidden) {
+        setTimeout(() => versionShowDiv.hidden = true, showMs);
+    }
+}
+
+const uploadFiles = {};
+
+/**
+ * 上传任务开始之前要进行的操作 如果此函数返回 true 则代表可以上传 如果是 false 则代表不能上传
+ * @param params 上传操作要用的参数
+ * @param file 被上传的文件
+ */
+function uploadBefore(params, file) {
+    uploadFiles[params.fileName] = 0;
+    let str = " ";
+    for (const fileName in uploadFiles) {
+        str += `《${fileName}》`
+    }
+    showMessage(str + " 正在上传中....", 0, false);
+    return file !== null;
+}
+
+/**
+ * 上传任务结束之后要进行的操作
+ * @param fileName 上传操作结束的文件名字
+ */
+function uploadAfter(fileName) {
+    delete uploadFiles[fileName];
+    if (uploadFiles.length === 0) {
+        showMessage(" 所有文件上传结束！");
+    } else {
+        let str = " ";
+        for (const fileName in uploadFiles) {
+            str += `《${fileName}》`
+        }
+        showMessage(str + " 正在继续上传中....", 0, false);
+    }
 }
 
 showMessage(" 正在获取服务器连接中...")
@@ -359,7 +396,7 @@ window.onload = function () {
             let noWarCount = 0;
             for (const file of files) {
                 if (file.name.endsWith(".war")) {
-                    jokerBoxPopUp.show(`检测到 war 文件，正在将 《${file.name}》 自动解析为一个同名的目录！`)
+                    jokerBoxPopUp.show(`检测到 war 文件，正在将 《${file.name}》 自动解析为一个同名的目录！`);
                     // 代表是 war 文件 需要被解析一下
                     Utils_io.unzipFile(file, (c, f, path, backOk) => {
                         diskMirror.upload({
@@ -370,11 +407,13 @@ window.onload = function () {
                             res.lastModified = new Date().getTime()
                             jokerBoxPopUp.show(`${file.name} 文件中：批量上传了 ${c} 个文件。`);
                             backOk[0] = true;
+                            uploadAfter(file.name);
                         }, e => {
                             backOk[0] = true;
                             jokerBoxPopUp.show(`${file.name} 中 有文件解压失败!!! ${JSON.stringify(e)}`);
-                            console.error(e)
-                        })
+                            console.error(e);
+                            uploadAfter(file.name);
+                        }, uploadBefore)
                     }, () => {
                         jokerBoxPopUp.show(`${file.name} 解压完毕!!!`);
                         if (++noWarCount === files.length) {
@@ -391,10 +430,11 @@ window.onload = function () {
                 }, file, (res) => {
                     res.lastModified = new Date().getTime()
                     jokerBoxPopUp.show(`共${files.length} 个文件！目前批量上传了 ${++noWarCount} 个文件。`);
+                    uploadAfter(res.fileName);
                     if (noWarCount === files.length) {
                         reloadFsPath(element);
                     }
-                }, undefined)
+                }, undefined, uploadBefore)
             }
         })
     } catch (e) {
@@ -423,7 +463,8 @@ window.onload = function () {
                 type: 'Binary'
             }, file, (res) => {
                 jokerBoxPopUp.show(res.fileName + " 上传成功!!! 刷新可见");
-            }, undefined, undefined);
+                uploadAfter(file.name);
+            }, undefined, uploadBefore);
         },
         // 文本数据不需要进行任何操作
         (_) => {
@@ -457,6 +498,7 @@ window.onload = function () {
                 type: 'Binary'
             }, file, (res) => {
                 jokerBoxPopUp.show(res.fileName + " 上传成功!!! 刷新可见");
-            }, undefined, undefined);
+                uploadAfter(fileName);
+            }, undefined, uploadBefore);
         }, undefined, undefined, false)
 }
