@@ -41,7 +41,6 @@ public class DiskMirrorMAIN implements WebMvcConfigurer {
         }
 
         logger.info("允许跨域列表：{}", Arrays.toString(corsAllowOrigin));
-
         final ConfigurableApplicationContext run;
         try {
             run = SpringApplication.run(DiskMirrorMAIN.class);

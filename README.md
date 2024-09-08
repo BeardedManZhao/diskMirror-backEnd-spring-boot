@@ -87,6 +87,12 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
+### 2024.09.08
+
+- 为 DiskMirror 核心组件版本升级到 1.2.7
+- 这启用了对于密钥的支持！
+- 启动服务的时候，会打印出密钥的具体数值，不再需要额外的计算出可用的数字密钥！
+
 ### 2024.09.02
 
 - 为 DiskMirror-Front 版本升级到 2.1.0
