@@ -183,4 +183,14 @@ public interface CRUD {
     @RequestMapping("/setSpaceSk")
     @ResponseBody
     String setSpaceSk(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
+
+    /**
+     * 将指定的 userId 生成一个新的密钥
+     *
+     * @param password 关机操作使用的密钥！
+     * @return 返回结果
+     */
+    @RequestMapping("/shutdown")
+    @ResponseBody
+    String shutdown(String password);
 }

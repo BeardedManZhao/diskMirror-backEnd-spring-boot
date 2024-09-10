@@ -19,7 +19,7 @@ diskMirror 后端服务器的 SpringBoot 版本，此版本中拓展了 DiskMirr
 
 ```yaml
 disk-mirror:
-  # 此配置项目代表的就是是否启用 diskMirror 如果设置为 false 则代表不启用，diskMirror 的starter 将不会被加载，需要您手动设置此参数
+  # 此配置项目代表的就是是否启用 diskMirror 如果设置为 false 则代表不启用，diskMirror 的starter 将不会被加载
   enable-feature: true
   # 要使用的盘镜适配器类型 在这里默认数值是本地盘镜适配器，具体的适配器 您可以查阅 top.lingyuzhao.diskMirror.core.DiskMirror 类
   adapter-type: "LocalFSAdapter"
@@ -32,15 +32,67 @@ disk-mirror:
   # 返回结果的key 返回结果中 结果状态的字段名字
   res-key: "res"
   # 协议前缀，默认为http 不同协议前缀有不同的意义，用于拼接 url
-  protocol-prefix: "http://localhost:80/"
+  protocol-prefix: ""
   # 参数 可能会派上用场，在不同的适配器中有不同的实现
   params: { }
   # 用户磁盘配额 每个盘镜空间的磁盘最大空间数值，单位是字节
-  user-disk-mirror-space-quota: 134217728
+  user-disk-mirror-space-quota: 1073741824
   # 安全密钥
   secure-key: ""
   # 指定的几个用户的空间对应的容量
   space-max-size: { }
+  # 指定后端服务器相关的配置
+  backend:
+    # 指定后端服务器的关机控制器
+    shutdown-controller:
+      # 这里代表是否要启用关机控制器
+      enable: true
+      # 这里代表的是关机控制器的操作密钥 此密钥独立于 diskMirror 可防止被其它用户关机
+      password: "zhao"
+      # 这里代表的是在关机之前预留的时间，一般是用来将关机的信息返回给客户端的 单位是毫秒
+      timeout: 5000
+
+# Spring Boot 配置文件
+spring:
+  # mvc 配置
+  mvc:
+    resources:
+      cache:
+        # 设置缓存时间 这里是以秒为单位 代表的 1 小时
+        period: 3600
+        # cachecontrol 具有更多的配置，其中也包括 period 但是叫做 max-age 并且 通过 cachecontrol 配置的优先级更高
+        # 也就是说 在这里配置最后会直接覆盖掉 cache.period
+        # 一般来说 需要更详细的配置就需要在这里操作
+        cachecontrol:
+          # 设置缓存的过期时间 这是告诉浏览器此资源缓存 7200 秒
+          max-age: 7200
+        # 配置资源的对比策略，这里是使用的最后一次修改的时间
+        # 这个配置项在 spring 5.2.0 之后才支持
+        # 如果不配置此选项 默认的策略是 Last-Modified
+        # Last-Modified 的策略是根据资源的最后修改时间来判断资源是否被修改过
+        # 如果资源被修改过 则会返回 304 状态码
+        # 如果资源没有被修改过 则会返回 200 状态码
+        # 但是 Last-Modified 的策略存在一个问题，就是如果资源的最后修改时间被修改过，那么资源的最后修改时间也会被修改，这样就会导致资源的最后修改时间永远是当前时间。
+        # 这个配置项默认是 true
+        use-last-modified: true
+  # 配置 HTTP 多部分文件上传
+  servlet:
+    # 文件上传相关配置
+    multipart:
+      # 指定临时文件的存储位置
+      # 注意：此目录必须存在，并且应用程序应具有写入权限
+      location: /opt/app/diskMirror-spring-boot/temp
+      # 指定临时文件的位置（与location配置相同）
+      # 这个配置在较新版本的Spring中可能不是必需的
+      # temp-location: /opt/app/diskMirror-spring-boot/temp
+      # 单个文件的最大大小
+      max-file-size: 1024MB
+      # 整个请求中所有文件的总大小的最大值，默认值为多部分数据的最大大小
+      max-request-size: 1030MB
+      # 是否启用文件大小检查，默认为true
+      enabled: true
+      # 当文件大小超过这个阈值时，才会使用临时文件存储
+      file-size-threshold: 4MB
 ```
 
 配置完毕之后，您只需要将 MAIN 方法启动。
@@ -86,6 +138,11 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 ```
 
 ## 更新日志
+
+### 2024.09.10
+
+- 启用了关机服务的支持
+- 为 DiskMirror-Front 版本升级到 2.1.1
 
 ### 2024.09.08
 

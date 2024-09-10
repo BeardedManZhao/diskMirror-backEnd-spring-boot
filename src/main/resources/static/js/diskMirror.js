@@ -602,7 +602,7 @@ class DiskMirror {
     /**
      * 获取指定空间的已使用容量 单位是 字节
      * @param userId {int} 需要被检索的空间id
-     * @param type {string} 需要被检索的文件类型
+     * @param type {'Binary'|'TEXT'} 需要被检索的文件类型
      * @param okFun {function} 操作成功之后的回调函数 输入是计算出来的已使用容量
      * @param errorFun {function} 操作失败之后的回调函数 输入是错误信息
      */
@@ -696,7 +696,7 @@ class DiskMirror {
             } else {
                 console.error(err);
             }
-            return
+            return;
         }
         if (checkFun !== undefined && !checkFun(userId)) {
             return;
@@ -709,6 +709,41 @@ class DiskMirror {
                 url: this.diskMirrorUrl + this.getController() + '/getAllProgressBar',
                 params: {
                     id: userId
+                }
+            }
+        ).then(function (res) {
+            // 处理成功
+            if (okFun !== undefined) {
+                okFun(res.data);
+            } else {
+                console.info(res.data);
+            }
+        }).catch(function (err) {
+            // 处理错误
+            if (errorFun !== undefined) {
+                errorFun(err);
+            } else {
+                console.error(err);
+            }
+        });
+    }
+
+    /**
+     * 将当前客户端连接的服务器关机（如果服务器端受支持的话，则会返回关机或有效信息）
+     *
+     * @param password {string} 关机操作的校验码，如果校验码不正确，则无法处理关机请求
+     * @param okFun {function} 操作成功之后的回调函数 输入是被文件进度的json对象
+     * @param errorFun {function} 操作失败之后的回调函数 输入是错误信息
+     */
+    shutdown(password, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e)) {
+        axios.defaults.withCredentials = true;
+        // 开始获取
+        axios(
+            {
+                method: 'post',
+                url: this.diskMirrorUrl + this.getController() + '/shutdown',
+                params: {
+                    password: password
                 }
             }
         ).then(function (res) {

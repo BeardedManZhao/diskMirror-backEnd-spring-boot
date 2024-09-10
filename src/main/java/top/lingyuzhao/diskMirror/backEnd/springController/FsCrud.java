@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.lingyuzhao.diskMirror.backEnd.conf.WebConf;
+import top.lingyuzhao.diskMirror.backEnd.springConf.DiskMirrorBackEndProperties;
 import top.lingyuzhao.diskMirror.backEnd.springConf.DiskMirrorMAIN;
 import top.lingyuzhao.diskMirror.backEnd.utils.HttpUtils;
 import top.lingyuzhao.diskMirror.conf.Config;
@@ -46,15 +47,18 @@ public class FsCrud implements CRUD {
 
     protected final Config DISK_MIRROR_CONFIG;
 
+    protected final DiskMirrorBackEndProperties diskMirrorBackEndProperties;
+
     /**
      * 直接使用在外部初始化好的适配器来进行初始化
      *
      * @param adapter    在外界实例化好的适配器对象
      * @param properties 配置类 通过 starter 获取到的配置类
      */
-    public FsCrud(Adapter adapter, top.lingyuzhao.diskMirror.starter.conf.properties.DiskMirrorProperties properties) {
+    public FsCrud(Adapter adapter, top.lingyuzhao.diskMirror.starter.conf.properties.DiskMirrorProperties properties, DiskMirrorBackEndProperties diskMirrorBackEndProperties) {
         this.adapter = adapter;
         this.DISK_MIRROR_CONFIG = adapter.getConfig();
+        this.diskMirrorBackEndProperties = diskMirrorBackEndProperties;
         DiskMirrorMAIN.logger.info("diskMirror 明文密钥：\"{}\" 被解析为数字密钥：{}", properties.getSecureKey(), adapter.getConfig().getString(Config.SECURE_KEY));
         this.DISK_MIRROR_CONFIG.put(WebConf.IO_MODE, properties.getAdapterType());
     }
@@ -385,6 +389,29 @@ public class FsCrud implements CRUD {
 //            WebConf.LOGGER.error("getUseSize 函数调用错误!!!", e);
 //            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
 //        }
+        // 此服务如果可以随意被别人调用 则不安全，因此暂时不提供此服务了
         return "还未集成此服务!";
+    }
+
+    @Override
+    public String shutdown(String password) {
+        final DiskMirrorBackEndProperties.ShutdownController shutdownController = diskMirrorBackEndProperties.getShutdownController();
+        if (shutdownController.isEnable()) {
+            if (shutdownController.getPassword().equals(password)) {
+                WebConf.LOGGER.info("shutdown 函数调用成功，{} 毫秒之后关闭 diskMirror 服务!", shutdownController.getTimeout());
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(shutdownController.getTimeout());
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException("shutdown时，延迟功能出现错误！", e);
+                    }
+                    WebConf.LOGGER.info("shutdown 函数: 开始关闭 diskMirror 服务!");
+                    DiskMirrorMAIN.run.stop();
+                }).start();
+                return "服务器已尝试关机！";
+            }
+            return "密码有误 验证失败，无法关机！";
+        }
+        return "关机功能未启用~";
     }
 }

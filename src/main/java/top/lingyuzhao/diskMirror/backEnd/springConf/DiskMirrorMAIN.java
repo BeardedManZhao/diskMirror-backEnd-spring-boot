@@ -6,6 +6,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 })
 public class DiskMirrorMAIN implements WebMvcConfigurer {
     public final static Logger logger = LoggerFactory.getLogger(DiskMirrorMAIN.class);
+    public static ConfigurableApplicationContext run;
 
     /**
      * 跨域允许列表
@@ -41,7 +43,6 @@ public class DiskMirrorMAIN implements WebMvcConfigurer {
         }
 
         logger.info("允许跨域列表：{}", Arrays.toString(corsAllowOrigin));
-        final ConfigurableApplicationContext run;
         try {
             run = SpringApplication.run(DiskMirrorMAIN.class);
         } catch (RuntimeException r) {
@@ -160,5 +161,13 @@ public class DiskMirrorMAIN implements WebMvcConfigurer {
                     .allowCredentials(true)
                     .maxAge(3600L);
         }
+    }
+
+    /**
+     * @return 后端服务器特有的配置类
+     */
+    @Bean({"top.lingyuzhao.diskMirror.backEnd.springConf.DiskMirrorBackEndProperties"})
+    public DiskMirrorBackEndProperties getDiskMirrorBackEndProperties() {
+        return new DiskMirrorBackEndProperties();
     }
 }

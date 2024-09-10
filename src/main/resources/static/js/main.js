@@ -53,8 +53,6 @@ function uploadAfter(fileName) {
     }
 }
 
-showMessage(" 正在获取服务器连接中...")
-
 function transferDeposit() {
     const s = prompt("请输入您要转存的文件的 url", "https://xxx");
     if (s) {
@@ -263,19 +261,37 @@ window.onload = function () {
         // 获取状态灯
         const status_bar = document.getElementsByClassName("status_bar");
 
-        for (let statusBarElement of status_bar) {
-            statusBarElement.addEventListener("click", function () {
-                if (statusBarElement.style.color === 'red') {
-                    // 代表停止 在这里重新连接
-                    diskMirror.setController('/FsCrud');
-                    jokerBoxPopUp.show("正在重新连接服务器...");
-                } else {
-                    // 代表启动 在这里断开连接
-                    diskMirror.setController("---------------");
-                    jokerBoxPopUp.show("正在断开服务器连接...");
+        // 设置第一个指示灯
+        status_bar[0].addEventListener("click", function () {
+            if (status_bar[0].style.color === 'red') {
+                // 代表停止 在这里重新连接
+                diskMirror.setController('/FsCrud');
+                jokerBoxPopUp.show("正在重新连接服务器...");
+            } else {
+                // 代表启动 在这里断开连接
+                diskMirror.setController("---------------");
+                jokerBoxPopUp.show("正在断开服务器连接...");
+            }
+        })
+        // 设置第二个指示灯
+        status_bar[1].addEventListener("click", function () {
+            if (status_bar[1].style.color === 'red') {
+                // 代表停止 无法开机
+                jokerBoxPopUp.show("如果您的服务器已经关机，无法开机！如果您只是断开连接但没关服务器，您可以再次点击信号标志重新连接！");
+            } else {
+                // 代表已经启动 在这里关机
+                const s = window.prompt("请您输入您的关机密钥（请注意，您现在的操作是关掉 diskMirror 服务器！）", "");
+                if (s) {
+                    diskMirror.shutdown(s, (r) => {
+                        showMessage(" " + r)
+                    }, (e) => {
+                        showMessage("⚠ 关机失败！" + e)
+                    });
+                } else if (s.length === 0) {
+                    showMessage("⚠ 请您输入密钥哦，没有密钥是不可以关机的！");
                 }
-            })
-        }
+            }
+        })
 
         // 设置logo点击查询版本
         document.querySelector("#bigLogoImage").addEventListener("click", function () {
