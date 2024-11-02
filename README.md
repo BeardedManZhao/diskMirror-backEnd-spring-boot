@@ -51,6 +51,16 @@ disk-mirror:
       password: "zhao"
       # 这里代表的是在关机之前预留的时间，一般是用来将关机的信息返回给客户端的 单位是毫秒
       timeout: 5000
+  # 图像文件压缩模块配置
+  image-compress-module:
+    # 设置位 true 代表启用~ 反之则不启用 不启用的将不会被加载到 diskMirror 中
+    enable: true
+    # 设置 png 调色板模式 默认是 RGB_8 代表 8 位压缩
+    palette-png: "RGB_8"
+    # 设置 调色板生成器，默认是 X255
+    palette-generator: "X255"
+    # 设置是否支持透明 默认是 false
+    transparent: false
 
 # Spring Boot 配置文件
 spring:
