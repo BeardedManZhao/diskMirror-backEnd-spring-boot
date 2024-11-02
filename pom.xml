@@ -32,7 +32,7 @@
         <dependency>
             <groupId>io.github.BeardedManZhao</groupId>
             <artifactId>diskMirror-spring-boot-starter</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
 
         <!-- diskMirror 的后端服务器依赖 会自动的使用 diskMirror starter 获取到的适配器 -->
@@ -40,13 +40,6 @@
             <groupId>io.github.BeardedManZhao</groupId>
             <artifactId>DiskMirrorBackEnd</artifactId>
             <version>2024.04.12</version>
-        </dependency>
-
-        <!-- diskMirror 的版本 -->
-        <dependency>
-            <groupId>io.github.BeardedManZhao</groupId>
-            <artifactId>diskMirror</artifactId>
-            <version>1.2.7</version>
         </dependency>
 
         <!-- 如果需要对接 HDFS 才导入 如果不需要就不导入此依赖 -->

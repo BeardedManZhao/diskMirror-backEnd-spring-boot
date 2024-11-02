@@ -139,6 +139,11 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
+### 2024.11.02
+
+- 集成了 较新版本的 [diskMirror starter 1.0.3版本](https://github.com/BeardedManZhao/diskMirror-spring-boot-starter.git)
+- 启动错误信息的展示优化
+
 ### 2024.09.10
 
 - 启用了关机服务的支持
