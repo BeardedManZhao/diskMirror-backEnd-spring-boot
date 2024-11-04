@@ -149,6 +149,11 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
+### 2024.11.04
+
+- 为 DiskMirror 核心组件版本升级到 1.3.2
+- 下载文件时，对于文件大小的显示做了优化，如果被下载的文件数据流中无文件字节数显示，则不会强制设置为 0，这能够让文件的下载模块支持多种适配器！
+
 ### 2024.11.02
 
 - 集成了 较新版本的 [diskMirror starter 1.0.3版本](https://github.com/BeardedManZhao/diskMirror-spring-boot-starter.git)

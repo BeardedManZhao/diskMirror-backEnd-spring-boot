@@ -206,7 +206,10 @@ public class FsCrud implements CRUD {
 
         try {
             fileInputStream = adapter.downLoad(jsonObject);
-            httpServletResponse.setHeader("Content-Length", String.valueOf(fileInputStream.available()));
+            final int available = fileInputStream.available();
+            if (available > 0) {
+                httpServletResponse.setHeader("Content-Length", String.valueOf(available));
+            }
         } catch (IOException | UnsupportedOperationException e) {
             WebConf.LOGGER.warn(e.toString());
             httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
