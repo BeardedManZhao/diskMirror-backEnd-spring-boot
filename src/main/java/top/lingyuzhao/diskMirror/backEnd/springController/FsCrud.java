@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import top.lingyuzhao.diskMirror.backEnd.conf.DiskMirrorConfig;
 import top.lingyuzhao.diskMirror.backEnd.conf.WebConf;
 import top.lingyuzhao.diskMirror.backEnd.springConf.DiskMirrorBackEndProperties;
 import top.lingyuzhao.diskMirror.backEnd.springConf.DiskMirrorMAIN;
@@ -61,6 +62,7 @@ public class FsCrud implements CRUD {
         this.diskMirrorBackEndProperties = diskMirrorBackEndProperties;
         DiskMirrorMAIN.logger.info("diskMirror 明文密钥：\"{}\" 被解析为数字密钥：{}", properties.getSecureKey(), adapter.getConfig().getString(Config.SECURE_KEY));
         this.DISK_MIRROR_CONFIG.put(WebConf.IO_MODE, properties.getAdapterType());
+        DiskMirrorConfig.loadConf(this.DISK_MIRROR_CONFIG);
     }
 
     /**
