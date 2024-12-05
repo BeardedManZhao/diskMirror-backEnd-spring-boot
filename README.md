@@ -149,11 +149,17 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
+### 2024.12.05
+
+- 为 DiskMirror 核心组件版本升级到 1.3.5
+- 移除了 MVC 后端模块 进行单独设计与实现！
+
 ### 2024.11.06
 
 - 为 DiskMirror 核心组件版本升级到 1.3.2
 - 下载文件时，对于文件大小的显示做了优化，如果被下载的文件数据流中无文件字节数显示，则不会强制设置为 0，这能够让文件的下载模块支持多种适配器！
-- 解决了下载 预览 文件时，sk 校验不论如何都不通过的问题，问题的发生是因为在 springBoot 的版本中，废弃了 `top.lingyuzhao.diskMirror.backEnd.conf.DiskMirrorConfig` 的配置，但下载和预览的sk校验模块需要使用到它，本次更新中，我们将配置类进行同步！
+- 解决了下载 预览 文件时，sk 校验不论如何都不通过的问题，问题的发生是因为在 springBoot
+  的版本中，废弃了 `top.lingyuzhao.diskMirror.backEnd.conf.DiskMirrorConfig` 的配置，但下载和预览的sk校验模块需要使用到它，本次更新中，我们将配置类进行同步！
 
 ### 2024.11.02
 

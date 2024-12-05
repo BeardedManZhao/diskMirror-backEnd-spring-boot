@@ -109,7 +109,7 @@ public class DiskMirrorMAIN implements WebMvcConfigurer {
                     <dependency>
                         <groupId>io.github.BeardedManZhao</groupId>
                         <artifactId>diskMirror-spring-boot-starter</artifactId>
-                        <version>1.0.3</version>
+                        <version>1.0.5</version>
                     </dependency>
                             
                     <!-- diskMirror 的后端服务器依赖 会自动的使用 diskMirror starter 获取到的适配器 -->
@@ -145,14 +145,14 @@ public class DiskMirrorMAIN implements WebMvcConfigurer {
                 ```
                 disk-mirror:
                   # 此配置项目代表的就是是否启用 diskMirror 如果设置为 false 则代表不启用，diskMirror 的starter 将不会被加载，需要您手动设置此参数
-                  enable-feature: true
+                  enabled-feature: true
                 ```
                                     
                 # 如果您确定配置项目启动，则请您确定您的配置文件中是否缺少某些配置，下面是一个配置模板，一般来说，您的配置文件中应该是基于下面的模板来进行修改的
                 ```
                 disk-mirror:
                   # 此配置项目代表的就是是否启用 diskMirror 如果设置为 false 则代表不启用，diskMirror 的starter 将不会被加载
-                  enable-feature: true
+                  enabled-feature: false
                   # 要使用的盘镜适配器类型 在这里默认数值是本地盘镜适配器，具体的适配器 您可以查阅 top.lingyuzhao.diskMirror.core.DiskMirror 类
                   adapter-type: "LocalFSAdapter"
                   # 要被盘镜管理的目录 用于存储数据的目录 此目录是真实目录
@@ -164,25 +164,15 @@ public class DiskMirrorMAIN implements WebMvcConfigurer {
                   # 返回结果的key 返回结果中 结果状态的字段名字
                   res-key: "res"
                   # 协议前缀，默认为http 不同协议前缀有不同的意义，用于拼接 url
-                  protocol-prefix: ""
+                  protocol-prefix: "http://localhost:80/"
                   # 参数 可能会派上用场，在不同的适配器中有不同的实现
                   params: { }
                   # 用户磁盘配额 每个盘镜空间的磁盘最大空间数值，单位是字节
-                  user-disk-mirror-space-quota: 1073741824
+                  user-disk-mirror-space-quota: 134217728
                   # 安全密钥
                   secure-key: ""
                   # 指定的几个用户的空间对应的容量
                   space-max-size: { }
-                  # 指定后端服务器相关的配置
-                  backend:
-                    # 指定后端服务器的关机控制器
-                    shutdown-controller:
-                      # 这里代表是否要启用关机控制器
-                      enable: true
-                      # 这里代表的是关机控制器的操作密钥 此密钥独立于 diskMirror 可防止被其它用户关机
-                      password: "zhao"
-                      # 这里代表的是在关机之前预留的时间，一般是用来将关机的信息返回给客户端的 单位是毫秒
-                      timeout: 5000
                   # 图像文件压缩模块配置
                   image-compress-module:
                     # 设置位 true 代表启用~ 反之则不启用 不启用的将不会被加载到 diskMirror 中
@@ -193,6 +183,12 @@ public class DiskMirrorMAIN implements WebMvcConfigurer {
                     palette-generator: "X255"
                     # 设置是否支持透明 默认是 false
                     transparent: false
+                  # 设置校验模块
+                  verifications:
+                    # 设置读取操作中的 sk 校验 这样所有的读取操作都需要经过这个模块了
+                    - "SkCheckModule$read",
+                    # 设置写入操作中的 sk 校验 这样所有的写入操作都需要经过这个模块了
+                    - "SkCheckModule$writer"
                 ```
                                     
                 - 如果还是具有此问题 请您在 https://github.com/BeardedManZhao 中联系作者！

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
@@ -10,7 +10,7 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <diskMirror.version>1.3.2</diskMirror.version>
+        <diskMirror.version>1.3.5</diskMirror.version>
     </properties>
 
     <!--  设置 SpringBoot 做为父项目 所有的 SpringBoot 项目都应该以此为父项目  -->
@@ -26,7 +26,7 @@
             <dependency>
                 <groupId>io.github.BeardedManZhao</groupId>
                 <artifactId>DiskMirror</artifactId>
-                <version>1.3.2</version>
+                <version>1.3.5</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -43,21 +43,14 @@
         <dependency>
             <groupId>io.github.BeardedManZhao</groupId>
             <artifactId>DiskMirror</artifactId>
-            <version>1.3.2</version>
+            <version>1.3.5</version>
         </dependency>
         <!-- diskMirror 的 starter 依赖 帮助您获取到适配器-->
         <dependency>
             <groupId>io.github.BeardedManZhao</groupId>
             <artifactId>diskMirror-spring-boot-starter</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.5</version>
         </dependency>
-        <!-- diskMirror 的后端服务器依赖 会自动的使用 diskMirror starter 获取到的适配器 -->
-        <dependency>
-            <groupId>io.github.BeardedManZhao</groupId>
-            <artifactId>DiskMirrorBackEnd</artifactId>
-            <version>2024.04.12</version>
-        </dependency>
-
         <!-- 如果需要对接 HDFS 才导入 如果不需要就不导入此依赖 -->
         <dependency>
             <groupId>org.apache.hadoop</groupId>

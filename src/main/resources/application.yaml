@@ -1,6 +1,6 @@
 disk-mirror:
   # 此配置项目代表的就是是否启用 diskMirror 如果设置为 false 则代表不启用，diskMirror 的starter 将不会被加载
-  enable-feature: true
+  enabled-feature: true
   # 要使用的盘镜适配器类型 在这里默认数值是本地盘镜适配器，具体的适配器 您可以查阅 top.lingyuzhao.diskMirror.core.DiskMirror 类
   adapter-type: "LocalFSAdapter"
   # 要被盘镜管理的目录 用于存储数据的目录 此目录是真实目录
@@ -41,6 +41,13 @@ disk-mirror:
     palette-generator: "X255"
     # 设置是否支持透明 默认是 false
     transparent: false
+  # 设置校验模块
+  verifications:
+    # 设置读取操作中的 sk 校验 这样所有的读取操作都需要经过这个模块了
+    - "SkCheckModule$read"
+    # 设置写入操作中的 sk 校验 这样所有的写入操作都需要经过这个模块了
+    - "SkCheckModule$writer"
+
 
 # Spring Boot 配置文件
 spring:

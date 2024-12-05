@@ -11,11 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import top.lingyuzhao.diskMirror.backEnd.conf.DiskMirrorConfig;
-import top.lingyuzhao.diskMirror.backEnd.conf.WebConf;
 import top.lingyuzhao.diskMirror.backEnd.springConf.DiskMirrorBackEndProperties;
 import top.lingyuzhao.diskMirror.backEnd.springConf.DiskMirrorMAIN;
-import top.lingyuzhao.diskMirror.backEnd.utils.HttpUtils;
+import top.lingyuzhao.diskMirror.backEnd.springUtils.HttpUtils;
 import top.lingyuzhao.diskMirror.conf.Config;
 import top.lingyuzhao.diskMirror.core.Adapter;
 import top.lingyuzhao.diskMirror.core.DiskMirror;
@@ -49,6 +47,7 @@ public class FsCrud implements CRUD {
     protected final Config DISK_MIRROR_CONFIG;
 
     protected final DiskMirrorBackEndProperties diskMirrorBackEndProperties;
+    private final HttpUtils httpUtils;
 
     /**
      * 直接使用在外部初始化好的适配器来进行初始化
@@ -61,8 +60,8 @@ public class FsCrud implements CRUD {
         this.DISK_MIRROR_CONFIG = adapter.getConfig();
         this.diskMirrorBackEndProperties = diskMirrorBackEndProperties;
         DiskMirrorMAIN.logger.info("diskMirror 明文密钥：\"{}\" 被解析为数字密钥：{}", properties.getSecureKey(), adapter.getConfig().getString(Config.SECURE_KEY));
-        this.DISK_MIRROR_CONFIG.put(WebConf.IO_MODE, properties.getAdapterType());
-        DiskMirrorConfig.loadConf(this.DISK_MIRROR_CONFIG);
+        this.DISK_MIRROR_CONFIG.put("WebConf.IO_MODE", properties.getAdapterType());
+        this.httpUtils = new HttpUtils(DISK_MIRROR_CONFIG);
     }
 
     /**
@@ -72,14 +71,14 @@ public class FsCrud implements CRUD {
      * @param defKey             默认的密钥值，如果请求对象中没有包含 请求对象 则会使用此参数！
      * @param jsonObject         需要用来存储 key 的 json对象
      */
-    private static void getDiskMirrorXorSecureKey(HttpServletRequest httpServletRequest, int defKey, JSONObject jsonObject) {
+    private void getDiskMirrorXorSecureKey(HttpServletRequest httpServletRequest, int defKey, JSONObject jsonObject) {
         if (httpServletRequest == null || httpServletRequest.getCookies() == null) {
             jsonObject.put("secure.key", defKey);
             return;
         }
         for (Cookie cookie1 : httpServletRequest.getCookies()) {
             if ("diskMirror_xor_secure_key".equals(cookie1.getName())) {
-                jsonObject.put("secure.key", HttpUtils.xorDecrypt(Integer.parseInt(cookie1.getValue())));
+                jsonObject.put("secure.key", httpUtils.xorDecrypt(Integer.parseInt(cookie1.getValue())));
                 break;
             }
         }
@@ -97,9 +96,9 @@ public class FsCrud implements CRUD {
             // 校验数据
             if (file == null || params == null) {
                 if (file == null) {
-                    return HttpUtils.getResJsonStr(new JSONObject(), "您的文件数据为空，请确保您要上传的文件数据存储在 ”file“ 对应的请求数据包中!!!");
+                    return httpUtils.getResJsonStr(new JSONObject(), "您的文件数据为空，请确保您要上传的文件数据存储在 ”file“ 对应的请求数据包中!!!");
                 } else {
-                    return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                    return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
                 }
             }
             try (
@@ -109,8 +108,8 @@ public class FsCrud implements CRUD {
                 return adapter.upload(inputStream1, JSONObject.parseObject(IOUtils.getStringByStream(inputStream0, DISK_MIRROR_CONFIG.getString(Config.CHAR_SET)))).toString();
             }
         } catch (IOException | RuntimeException e) {
-            WebConf.LOGGER.error("add 函数调用错误!!!", e);
-            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+            DiskMirrorMAIN.logger.error("add 函数调用错误!!!", e);
+            return httpUtils.getResJsonStr(new JSONObject(), e.toString());
         }
     }
 
@@ -124,7 +123,7 @@ public class FsCrud implements CRUD {
     public String remove(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -133,8 +132,8 @@ public class FsCrud implements CRUD {
                 }
             }
         } catch (IOException | RuntimeException e) {
-            WebConf.LOGGER.error("remove 函数调用错误!!!", e);
-            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+            DiskMirrorMAIN.logger.error("remove 函数调用错误!!!", e);
+            return httpUtils.getResJsonStr(new JSONObject(), e.toString());
         }
     }
 
@@ -148,7 +147,7 @@ public class FsCrud implements CRUD {
     public String reName(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -157,8 +156,8 @@ public class FsCrud implements CRUD {
                 }
             }
         } catch (IOException | RuntimeException e) {
-            WebConf.LOGGER.error("reName 函数调用错误!!!", e);
-            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+            DiskMirrorMAIN.logger.error("reName 函数调用错误!!!", e);
+            return httpUtils.getResJsonStr(new JSONObject(), e.toString());
         }
     }
 
@@ -172,7 +171,7 @@ public class FsCrud implements CRUD {
     public String get(HttpServletRequest httpServletRequest, @RequestParam("params") MultipartFile params) {
         try {
             if (params == null) {
-                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -181,8 +180,8 @@ public class FsCrud implements CRUD {
                 }
             }
         } catch (IOException | RuntimeException e) {
-            WebConf.LOGGER.error("get 函数调用错误!!!", e);
-            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+            DiskMirrorMAIN.logger.error("get 函数调用错误!!!", e);
+            return httpUtils.getResJsonStr(new JSONObject(), e.toString());
         }
     }
 
@@ -213,7 +212,7 @@ public class FsCrud implements CRUD {
                 httpServletResponse.setHeader("Content-Length", String.valueOf(available));
             }
         } catch (IOException | UnsupportedOperationException e) {
-            WebConf.LOGGER.warn(e.toString());
+            DiskMirrorMAIN.logger.warn(e.toString());
             httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
 
@@ -222,7 +221,7 @@ public class FsCrud implements CRUD {
         ) {
             IOUtils.copy(fileInputStream, outputStream, true);
         } catch (RuntimeException | IOException e) {
-            WebConf.LOGGER.warn(e.toString());
+            DiskMirrorMAIN.logger.warn(e.toString());
             httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
@@ -232,7 +231,7 @@ public class FsCrud implements CRUD {
     public String transferDeposit(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -241,8 +240,8 @@ public class FsCrud implements CRUD {
                 }
             }
         } catch (IOException | RuntimeException e) {
-            WebConf.LOGGER.error("transferDeposit 函数调用错误!!!", e);
-            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+            DiskMirrorMAIN.logger.error("transferDeposit 函数调用错误!!!", e);
+            return httpUtils.getResJsonStr(new JSONObject(), e.toString());
         }
     }
 
@@ -251,7 +250,7 @@ public class FsCrud implements CRUD {
     public String transferDepositStatus(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -260,8 +259,8 @@ public class FsCrud implements CRUD {
                 }
             }
         } catch (IOException | RuntimeException e) {
-            WebConf.LOGGER.error("transferDeposit 函数调用错误!!!", e);
-            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+            DiskMirrorMAIN.logger.error("transferDeposit 函数调用错误!!!", e);
+            return httpUtils.getResJsonStr(new JSONObject(), e.toString());
         }
     }
 
@@ -281,7 +280,7 @@ public class FsCrud implements CRUD {
     public String mkdirs(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -290,8 +289,8 @@ public class FsCrud implements CRUD {
                 }
             }
         } catch (IOException | RuntimeException e) {
-            WebConf.LOGGER.error("mkdirs 函数调用错误!!!", e);
-            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+            DiskMirrorMAIN.logger.error("mkdirs 函数调用错误!!!", e);
+            return httpUtils.getResJsonStr(new JSONObject(), e.toString());
         }
     }
 
@@ -304,7 +303,7 @@ public class FsCrud implements CRUD {
      */
     @Override
     public String getSpaceSize(String spaceId) {
-        return HttpUtils.getResJsonStr(new JSONObject(), adapter.getConfig().getSpaceMaxSize(spaceId));
+        return httpUtils.getResJsonStr(new JSONObject(), adapter.getConfig().getSpaceMaxSize(spaceId));
     }
 
     /**
@@ -318,7 +317,7 @@ public class FsCrud implements CRUD {
     public String setSpaceSize(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -331,12 +330,12 @@ public class FsCrud implements CRUD {
                         throw new UnsupportedOperationException("请求参数不合规，请确保您在调用 setSpaceSize 函数的参数中设置了 userId and newSize， error:" + jsonObject);
                     }
                     adapter.setSpaceMaxSize(userId.toString(), newSize);
-                    return HttpUtils.getResJsonStr(jsonObject, this.adapter.getConfig().getString(Config.OK_VALUE));
+                    return httpUtils.getResJsonStr(jsonObject, this.adapter.getConfig().getString(Config.OK_VALUE));
                 }
             }
         } catch (IOException | RuntimeException e) {
-            WebConf.LOGGER.error("mkdirs 函数调用错误!!!", e);
-            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+            DiskMirrorMAIN.logger.error("setSpaceSize 函数调用错误!!!", e);
+            return httpUtils.getResJsonStr(new JSONObject(), e.toString());
         }
     }
 
@@ -347,7 +346,7 @@ public class FsCrud implements CRUD {
      * @return 操作成功之后返回的结果
      */
     public String getVersion() {
-        final DiskMirror orDefault = (DiskMirror) DISK_MIRROR_CONFIG.getOrDefault(WebConf.IO_MODE, DiskMirror.LocalFSAdapter);
+        final DiskMirror orDefault = (DiskMirror) DISK_MIRROR_CONFIG.getOrDefault("WebConf.IO_MODE", DiskMirror.LocalFSAdapter);
         return orDefault.getVersion() + '\n' + adapter.version();
     }
 
@@ -355,47 +354,45 @@ public class FsCrud implements CRUD {
     public String getUseSize(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
                 ) {
                     final JSONObject jsonObject = JSONObject.parseObject(IOUtils.getStringByStream(inputStream, DISK_MIRROR_CONFIG.getString(Config.CHAR_SET)));
                     jsonObject.put("useSize", adapter.getUseSize(jsonObject));
-                    return HttpUtils.getResJsonStr(jsonObject, this.adapter.getConfig().getString(Config.OK_VALUE));
+                    return httpUtils.getResJsonStr(jsonObject, this.adapter.getConfig().getString(Config.OK_VALUE));
                 }
             }
         } catch (IOException | RuntimeException e) {
-            WebConf.LOGGER.error("getUseSize 函数调用错误!!!", e);
-            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
+            DiskMirrorMAIN.logger.error("getUseSize 函数调用错误!!!", e);
+            return httpUtils.getResJsonStr(new JSONObject(), e.toString());
         }
     }
 
     @Override
     public String setSpaceSk(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
-//        try {
-//            final Part params = httpServletRequest.getPart("params");
-//            if (params == null) {
-//                return HttpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
-//            } else {
-//                try (
-//                        final InputStream inputStream = params.getInputStream()
-//                ) {
-//                    final JSONObject jsonObject = JSONObject.parseObject(
-//                            IOUtils.getStringByStream(inputStream, DISK_MIRROR_CONFIG.getString(Config.CHAR_SET))
-//                    );
-//                    final int i = this.adapter.setSpaceSk(jsonObject.getString("userId"));
-//                    jsonObject.clear();
-//                    jsonObject.put("sk", i);
-//                    return HttpUtils.getResJsonStr(jsonObject, this.adapter.getConfig().getString(Config.OK_VALUE));
-//                }
-//            }
-//        } catch (IOException | RuntimeException | ServletException e) {
-//            WebConf.LOGGER.error("getUseSize 函数调用错误!!!", e);
-//            return HttpUtils.getResJsonStr(new JSONObject(), e.toString());
-//        }
-        // 此服务如果可以随意被别人调用 则不安全，因此暂时不提供此服务了
-        return "还未集成此服务!";
+        try {
+            if (params == null) {
+                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+            } else {
+                try (
+                        final InputStream inputStream = params.getInputStream()
+                ) {
+                    final JSONObject jsonObject = JSONObject.parseObject(IOUtils.getStringByStream(inputStream, DISK_MIRROR_CONFIG.getString(Config.CHAR_SET)));
+                    final int i = this.adapter.setSpaceSk(jsonObject.getString("userId"), jsonObject.getIntValue(Config.SECURE_KEY));
+                    jsonObject.put(Config.SECURE_KEY, i);
+                    final String resJsonStr = httpUtils.getResJsonStr(jsonObject, this.adapter.getConfig().getString(Config.OK_VALUE));
+                    DiskMirrorMAIN.logger.info("setSpaceSk 函数调用成功，返回值:{}", resJsonStr);
+                    return resJsonStr;
+                }
+            }
+        } catch (IOException | RuntimeException e) {
+            DiskMirrorMAIN.logger.error("setSpaceSk 函数调用错误!!!", e);
+            final JSONObject jsonObject = new JSONObject();
+            jsonObject.put(Config.SECURE_KEY, e.toString());
+            return httpUtils.getResJsonStr(jsonObject, e.toString());
+        }
     }
 
     @Override
@@ -403,14 +400,14 @@ public class FsCrud implements CRUD {
         final DiskMirrorBackEndProperties.ShutdownController shutdownController = diskMirrorBackEndProperties.getShutdownController();
         if (shutdownController.isEnable()) {
             if (shutdownController.getPassword().equals(password)) {
-                WebConf.LOGGER.info("shutdown 函数调用成功，{} 毫秒之后关闭 diskMirror 服务!", shutdownController.getTimeout());
+                DiskMirrorMAIN.logger.info("shutdown 函数调用成功，{} 毫秒之后关闭 diskMirror 服务!", shutdownController.getTimeout());
                 new Thread(() -> {
                     try {
                         Thread.sleep(shutdownController.getTimeout());
                     } catch (InterruptedException e) {
                         throw new RuntimeException("shutdown时，延迟功能出现错误！", e);
                     }
-                    WebConf.LOGGER.info("shutdown 函数: 开始关闭 diskMirror 服务!");
+                    DiskMirrorMAIN.logger.info("shutdown 函数: 开始关闭 diskMirror 服务!");
                     DiskMirrorMAIN.run.stop();
                 }).start();
                 return "服务器已尝试关机！";
