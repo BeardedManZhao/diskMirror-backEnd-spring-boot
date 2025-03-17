@@ -20,7 +20,7 @@ diskMirror 后端服务器的 SpringBoot 版本，此版本中拓展了 DiskMirr
 ```yaml
 disk-mirror:
   # 此配置项目代表的就是是否启用 diskMirror 如果设置为 false 则代表不启用，diskMirror 的starter 将不会被加载
-  enable-feature: true
+  enabled-feature: true
   # 要使用的盘镜适配器类型 在这里默认数值是本地盘镜适配器，具体的适配器 您可以查阅 top.lingyuzhao.diskMirror.core.DiskMirror 类
   adapter-type: "LocalFSAdapter"
   # 要被盘镜管理的目录 用于存储数据的目录 此目录是真实目录
@@ -32,35 +32,37 @@ disk-mirror:
   # 返回结果的key 返回结果中 结果状态的字段名字
   res-key: "res"
   # 协议前缀，默认为http 不同协议前缀有不同的意义，用于拼接 url
-  protocol-prefix: ""
+  protocol-prefix: "http://localhost:80/"
   # 参数 可能会派上用场，在不同的适配器中有不同的实现
   params: { }
   # 用户磁盘配额 每个盘镜空间的磁盘最大空间数值，单位是字节
-  user-disk-mirror-space-quota: 1073741824
+  user-disk-mirror-space-quota: 134217728
   # 安全密钥
   secure-key: ""
   # 指定的几个用户的空间对应的容量
   space-max-size: { }
-  # 指定后端服务器相关的配置
-  backend:
-    # 指定后端服务器的关机控制器
-    shutdown-controller:
-      # 这里代表是否要启用关机控制器
-      enable: true
-      # 这里代表的是关机控制器的操作密钥 此密钥独立于 diskMirror 可防止被其它用户关机
-      password: "zhao"
-      # 这里代表的是在关机之前预留的时间，一般是用来将关机的信息返回给客户端的 单位是毫秒
-      timeout: 5000
+  # 设置要使用的空间配置方式 目前支持 HashMapper 和 JedisMapper 两种，用于将不同空间的配置信息放到第三方平台
+  use-space-config-mode: "HashMapper"
+  # redis 配置
+  redis-host-port-db: "127.0.0.1:6379:0"
+  # redis 密码
+  redis-password: "0000"
   # 图像文件压缩模块配置
   image-compress-module:
     # 设置位 true 代表启用~ 反之则不启用 不启用的将不会被加载到 diskMirror 中
-    enable: true
+    enable: false
     # 设置 png 调色板模式 默认是 RGB_8 代表 8 位压缩
     palette-png: "RGB_8"
     # 设置 调色板生成器，默认是 X255
     palette-generator: "X255"
     # 设置是否支持透明 默认是 false
     transparent: false
+  # 设置校验模块
+  verifications:
+    # 设置读取操作中的 sk 校验 这样所有的读取操作都需要经过这个模块了
+    - "SkCheckModule$read"
+    # 设置写入操作中的 sk 校验 这样所有的写入操作都需要经过这个模块了
+    - "SkCheckModule$writer"
 
 # Spring Boot 配置文件
 spring:
@@ -148,6 +150,11 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 ```
 
 ## 更新日志
+
+### 2025.02.04
+
+- 为 DiskMirror 核心组件版本升级到 1.4.4
+- 支持使用 jedisMapper 存储空间配置数据！
 
 ### 2024.12.05
 
