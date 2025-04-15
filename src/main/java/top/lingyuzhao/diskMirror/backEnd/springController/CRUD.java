@@ -56,6 +56,17 @@ public interface CRUD {
     String get(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
 
     /**
+     * 获取相关操作的函数
+     *
+     * @param httpServletRequest 请求对象 如果从这里获取 前端就是这样的：formData.append('这里是 part 的名字', JSON.stringify(params), "params");
+     * @param params             使用 spring 操作的 params 前端是这样的：formData.append('params', JSON.stringify(params), "这里是 part 的名字");
+     * @return 返回结果
+     */
+    @RequestMapping("/getUrlsNoRecursion")
+    @ResponseBody
+    String getUrlsNoRecursion(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params);
+
+    /**
      * 下载文件的后端处理函数
      *
      * @param httpServletRequest  来自前端的请求对象

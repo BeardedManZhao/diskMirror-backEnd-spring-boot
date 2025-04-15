@@ -151,6 +151,12 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
+### 2025.04.15
+
+- 为 `getUrlsNoRecursion` 进行了支持！
+- 为 DiskMirror 核心组件版本升级到 1.4.9
+- 为参数错误的情况的异常返回的json 做了启动时加载，避免了返回信息时候的频繁的json对象序列化操作，可以增强性能！
+
 ### 2025.02.04
 
 - 为 DiskMirror 核心组件版本升级到 1.4.4

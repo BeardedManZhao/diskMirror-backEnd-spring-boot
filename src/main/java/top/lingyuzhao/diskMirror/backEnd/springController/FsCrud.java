@@ -49,6 +49,8 @@ public class FsCrud implements CRUD {
     protected final DiskMirrorBackEndProperties diskMirrorBackEndProperties;
     private final HttpUtils httpUtils;
 
+    private final String errorParamsIsNull, errorFileIsNull;
+
     /**
      * 直接使用在外部初始化好的适配器来进行初始化
      *
@@ -62,6 +64,8 @@ public class FsCrud implements CRUD {
         DiskMirrorMAIN.logger.info("diskMirror 明文密钥：\"{}\" 被解析为数字密钥：{}", properties.getSecureKey(), adapter.getConfig().getString(Config.SECURE_KEY));
         this.DISK_MIRROR_CONFIG.put("WebConf.IO_MODE", properties.getAdapterType());
         this.httpUtils = new HttpUtils(DISK_MIRROR_CONFIG);
+        this.errorFileIsNull  = httpUtils.getResJsonStr(new JSONObject(), "您的文件数据为空，请确保您要上传的文件数据存储在 ”file“ 对应的请求数据包中!!!");
+        this.errorParamsIsNull = httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
     }
 
     /**
@@ -96,9 +100,9 @@ public class FsCrud implements CRUD {
             // 校验数据
             if (file == null || params == null) {
                 if (file == null) {
-                    return httpUtils.getResJsonStr(new JSONObject(), "您的文件数据为空，请确保您要上传的文件数据存储在 ”file“ 对应的请求数据包中!!!");
+                    return this.errorFileIsNull;
                 } else {
-                    return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                    return this.errorParamsIsNull;
                 }
             }
             try (
@@ -123,7 +127,7 @@ public class FsCrud implements CRUD {
     public String remove(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return this.errorParamsIsNull;
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -147,7 +151,7 @@ public class FsCrud implements CRUD {
     public String reName(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return this.errorParamsIsNull;
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -171,7 +175,7 @@ public class FsCrud implements CRUD {
     public String get(HttpServletRequest httpServletRequest, @RequestParam("params") MultipartFile params) {
         try {
             if (params == null) {
-                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return this.errorParamsIsNull;
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -181,6 +185,30 @@ public class FsCrud implements CRUD {
             }
         } catch (IOException | RuntimeException e) {
             DiskMirrorMAIN.logger.error("get 函数调用错误!!!", e);
+            return httpUtils.getResJsonStr(new JSONObject(), e.toString());
+        }
+    }
+
+    /**
+     * 获取相关操作的函数
+     *
+     * @param httpServletRequest 请求对象
+     * @return 返回结果
+     */
+    @Override
+    public String getUrlsNoRecursion(HttpServletRequest httpServletRequest, @RequestParam("params") MultipartFile params) {
+        try {
+            if (params == null) {
+                return this.errorParamsIsNull;
+            } else {
+                try (
+                        final InputStream inputStream = params.getInputStream()
+                ) {
+                    return adapter.getUrlsNoRecursion(JSONObject.parseObject(IOUtils.getStringByStream(inputStream, DISK_MIRROR_CONFIG.getString(Config.CHAR_SET)))).toString();
+                }
+            }
+        } catch (IOException | RuntimeException e) {
+            DiskMirrorMAIN.logger.error("getUrlsNoRecursion 函数调用错误!!!", e);
             return httpUtils.getResJsonStr(new JSONObject(), e.toString());
         }
     }
@@ -231,7 +259,7 @@ public class FsCrud implements CRUD {
     public String transferDeposit(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return this.errorParamsIsNull;
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -250,7 +278,7 @@ public class FsCrud implements CRUD {
     public String transferDepositStatus(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return this.errorParamsIsNull;
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -280,7 +308,7 @@ public class FsCrud implements CRUD {
     public String mkdirs(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return this.errorParamsIsNull;
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -317,7 +345,7 @@ public class FsCrud implements CRUD {
     public String setSpaceSize(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return this.errorParamsIsNull;
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -355,7 +383,7 @@ public class FsCrud implements CRUD {
     public String getUseSize(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return this.errorParamsIsNull;
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
@@ -375,7 +403,7 @@ public class FsCrud implements CRUD {
     public String setSpaceSk(HttpServletRequest httpServletRequest, @RequestPart("params") MultipartFile params) {
         try {
             if (params == null) {
-                return httpUtils.getResJsonStr(new JSONObject(), "您的请求参数为空，请确保您的请求参数 json 字符串存储在 ”params“ 对应的请求数据包中!");
+                return this.errorParamsIsNull;
             } else {
                 try (
                         final InputStream inputStream = params.getInputStream()
