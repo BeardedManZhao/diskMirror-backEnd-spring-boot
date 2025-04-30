@@ -46,7 +46,7 @@ disk-mirror:
   # redis 配置
   redis-host-port-db: "127.0.0.1:6379:0"
   # redis 密码
-  redis-password: "0000"
+  redis-password: "38243824"
   # 图像文件压缩模块配置
   image-compress-module:
     # 设置位 true 代表启用~ 反之则不启用 不启用的将不会被加载到 diskMirror 中
