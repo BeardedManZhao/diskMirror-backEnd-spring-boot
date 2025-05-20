@@ -418,7 +418,7 @@ class DiskMirror {
         // 判断是否有名为 diskMirror_xor_secure_key 的 cookie 如果没有就直接追加一个 cookie 的名字是 diskMirror_xor_secure_key 内容是 ${this.xorEncrypt(this.sk.toString())}
 
         // 开始计算 url
-        okFun(this.diskMirrorUrl + this.getController() + `/downLoad/${userId}/${type}?fileName=${fileName}`);
+        okFun(this.diskMirrorUrl + this.getController() + `/downLoad2/${userId}/${type}/${this.getSk()}/${fileName.startsWith('/') ? fileName.substring(1) : fileName}`);
     }
 
     /**

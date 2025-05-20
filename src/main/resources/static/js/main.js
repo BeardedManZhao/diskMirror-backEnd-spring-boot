@@ -148,12 +148,15 @@ function mkFile() {
 }
 
 function extractedFsList(res) {
+    if (res === undefined) {
+        res = [];
+    }
     if (res.length === 0) {
         jokerBoxPopUp.show("空空如也，快去创建一个吧！");
         res = [
             {
                 "fileName": "(^~^) 现在没有文件，快去创建一个吧！",
-                "url": "https://diskmirror.lingyuzhao.top//29/Binary//Article/Image/bigImage.jpg",
+                "url": "https://diskmirror.lingyuzhao.top/29/Binary/Article/Image/bigImage.jpg",
                 "lastModified": new Date().getTime(),
                 "size": 0,
                 "type": "Binary",
