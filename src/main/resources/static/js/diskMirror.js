@@ -397,8 +397,9 @@ class DiskMirror {
      * @param okFun {function} 操作成功之后的回调函数 输入是获取的文件的 url 地址！
      * @param errorFun {function} 操作失败之后的回调函数 输入是错误信息的错误码
      * @param checkFun {function} 操作前的检查函数 输入是请求参数对象，如果返回的是一个false 则代表检查失败不继续操作
+     * @param version {int} 要使用第几代的控制器下载文件 默认是第一代 兼容性最好
      */
-    downLoad(userId, type, fileName, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e), checkFun = undefined) {
+    downLoad(userId, type, fileName, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e), checkFun = undefined, version = 1) {
         if (userId === undefined || type == null || type === '' || fileName === undefined || fileName === '' || okFun === undefined) {
             const err = "您必须要输入 userId 和 type 以及 fileName 和 okFun 参数才可以进行文件对象的获取！";
             if (errorFun !== undefined) {
@@ -418,7 +419,7 @@ class DiskMirror {
         // 判断是否有名为 diskMirror_xor_secure_key 的 cookie 如果没有就直接追加一个 cookie 的名字是 diskMirror_xor_secure_key 内容是 ${this.xorEncrypt(this.sk.toString())}
 
         // 开始计算 url
-        okFun(this.diskMirrorUrl + this.getController() + `/downLoad2/${userId}/${type}/${this.getSk()}/${fileName.startsWith('/') ? fileName.substring(1) : fileName}`);
+        okFun(version < 2 ? this.diskMirrorUrl + this.getController() + `/downLoad/${userId}/${type}?fileName=${fileName}` : this.diskMirrorUrl + this.getController() + `/downLoad2/${userId}/${type}/${this.getSk()}/${fileName.startsWith('/') ? fileName.substring(1) : fileName}`);
     }
 
     /**

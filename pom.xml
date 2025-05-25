@@ -48,7 +48,7 @@
         <dependency>
             <groupId>io.github.BeardedManZhao</groupId>
             <artifactId>DiskMirror</artifactId>
-            <version>1.5.2</version>
+            <version>1.5.3</version>
         </dependency>
         <!-- diskMirror 的 starter 依赖 帮助您获取到适配器-->
         <dependency>

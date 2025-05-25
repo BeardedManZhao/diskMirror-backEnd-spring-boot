@@ -151,6 +151,12 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
+### 2025.05.25
+
+- 为 DiskMirror 核心组件版本升级到 1.5.3
+- 对 downLoad 第一代也优化，其和第二代性能无异，且兼容性更好
+- 对 js 文件优化，默认使用第一代下载
+
 ### 2025.05.20
 
 - 为 DiskMirror 核心组件版本升级到 1.5.2

@@ -5,6 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import top.lingyuzhao.diskMirror.backEnd.springConf.DiskMirrorMAIN;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 /**
  * 具有增删改查功能的控制器接口
@@ -91,9 +95,15 @@ public interface CRUD {
         final String requestURI = httpServletRequest.getRequestURI();
         // 获取路径前缀（不带通配符的部分）的长度
         final int le = "/FsCrud/downLoad2/".length() + String.valueOf(userId).length() + 1 + type.length() + 1 + sk.length();
+        final String path = requestURI.substring(le);
         // 提取文件名/路径部分 requestURI.substring(le) 现在 fileNameWithPath 就是 ** 匹配的内容
-        downLoad(httpServletRequest, httpServletResponse, userId, type, requestURI.substring(le), Integer.parseInt(sk));
+        try {
+            downLoad(httpServletRequest, httpServletResponse, userId, type, URLDecoder.decode(path, httpServletRequest.getCharacterEncoding()), Integer.parseInt(sk));
+        } catch (UnsupportedEncodingException e) {
+            DiskMirrorMAIN.logger.warn("无法解析的路径：" + path, e);
+        }
     }
+
     /**
      * 下载文件的后端处理函数
      *
