@@ -67,7 +67,12 @@
         const audioExtensions = ['.mp3', '.wav', '.flac', '.aac', '.wma'];
         const textExtensions = ['.yaml', '.txt', '.log', '.md', '.json', '.xml', '.yml', '.ini', '.cfg', '.conf', '.properties'];
 
-        htmlHeadingElement.innerText = searchParam;
+        const indexOfSk = searchParam.indexOf('sk');
+        if (indexOfSk !== -1) {
+            htmlHeadingElement.innerText = "来自他人的分享";
+        } else {
+            htmlHeadingElement.innerText = searchParam;
+        }
 
         // 获取到后缀
         const searchParamName = searchParams1[searchParams1.length - 1];
@@ -85,7 +90,7 @@
             document.querySelector('audio').src = searchParam;
             document.querySelector('audio').hidden = false;
         } else if (textExtensions.includes(searchParamType)) {
-            if (searchParam.indexOf('sk') !== -1) {
+            if (indexOfSk !== -1) {
                 alert("您不是此文件的所有者，无法预览文本！");
             } else {
                 // 直接使用 FileWriter
@@ -104,7 +109,7 @@
 
         document.querySelector('.download_button').addEventListener('click', () => window.open(searchParam));
         document.querySelector('.share_button').addEventListener('click', () => {
-            if (searchParam.indexOf('sk') !== -1) {
+            if (indexOfSk !== -1) {
                 alert("您不是此文件的所有者，无法分享！");
                 return;
             }
