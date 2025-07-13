@@ -18,7 +18,7 @@ disk-mirror:
   # 用户磁盘配额 每个盘镜空间的磁盘最大空间数值，单位是字节
   user-disk-mirror-space-quota: 134217728
   # 安全密钥
-  secure-key: "111"
+  secure-key: ""
   # 指定的几个用户的空间对应的容量
   space-max-size: { }
   # 设置要使用的空间配置方式 目前支持 HashMapper 和 JedisMapper 两种，用于将不同空间的配置信息放到第三方平台

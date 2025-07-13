@@ -50,7 +50,7 @@
         const type = indexConfig.spaceType ? indexConfig.spaceType : 'Binary';
         // 提取当前的文章信息
         const searchParams0 = DiskMirrorFront.search_Params("fileName");
-        const searchParams1 = DiskMirrorFront.search_Params("fileUrl");
+        const searchParams1 = DiskMirrorFront.search_Params("fileUrl") + "&t=" + Date.now().toString();
         const isUpdate = searchParams0.length > 0 && searchParams1.length > 0;
         let fileName_str;
         if (isUpdate) {

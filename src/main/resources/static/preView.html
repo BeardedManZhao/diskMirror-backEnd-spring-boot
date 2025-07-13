@@ -109,7 +109,7 @@
                 return;
             }
             const sk_str = prompt("请输入您的空间对应的密钥，用于创建sk", '0');
-            if (sk_str === undefined) {
+            if (sk_str === null) {
                 return;
             }
             const s = window.location.href.split('/')

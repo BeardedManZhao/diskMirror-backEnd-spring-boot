@@ -123,7 +123,7 @@ public interface CRUD {
     void downLoad(HttpServletRequest httpServletRequest,
                   HttpServletResponse httpServletResponse,
                   @PathVariable("userId") String userId, @PathVariable("type") String type,
-                  @RequestParam("fileName") String fileName, @RequestParam("sk") Integer sk
+                  @RequestParam("fileName") String fileName, @RequestParam(value = "sk", defaultValue = "0", required = false) Integer sk
     );
 
 
