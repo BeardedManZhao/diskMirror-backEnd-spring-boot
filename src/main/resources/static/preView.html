@@ -67,19 +67,17 @@
         const audioExtensions = ['.mp3', '.wav', '.flac', '.aac', '.wma'];
         const textExtensions = ['.yaml', '.txt', '.log', '.md', '.json', '.xml', '.yml', '.ini', '.cfg', '.conf', '.properties'];
 
-        const indexOfSk = searchParam.indexOf('sk');
-        if (indexOfSk !== -1) {
-            htmlHeadingElement.innerText = "来自他人的分享";
-        } else {
-            htmlHeadingElement.innerText = searchParam;
-        }
-
         // 获取到后缀
         const searchParamName = searchParams1[searchParams1.length - 1];
         const searchParamType = searchParamName.substring(searchParamName.lastIndexOf('.'));
 
         console.info(searchParamType)
-
+        const indexOfSk = searchParam.indexOf('sk');
+        if (indexOfSk !== -1) {
+            htmlHeadingElement.innerText = `来自他人的分享《${searchParamName}》`;
+        } else {
+            htmlHeadingElement.innerText = searchParam;
+        }
         if (imageExtensions.includes(searchParamType)) {
             document.querySelector('img').src = searchParam;
             document.querySelector('img').hidden = false;
