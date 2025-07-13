@@ -88,7 +88,7 @@ public class FsCrud implements CRUD {
         for (Cookie cookie1 : httpServletRequest.getCookies()) {
             if ("diskMirror_xor_secure_key".equals(cookie1.getName())) {
                 jsonObject.put("secure.key", httpUtils.xorDecrypt(Integer.parseInt(cookie1.getValue())));
-                break;
+                return;
             }
         }
         jsonObject.put("secure.key", defKey);
