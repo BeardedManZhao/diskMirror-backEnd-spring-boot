@@ -146,10 +146,16 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 [diskMirror-front](https://github.com/BeardedManZhao/diskMirror-front.git) 项目做为此项目的前端组件，融合方式如下所示
 
 ```
-直接将前端项目源码中的 web 目录粘贴到项目 static 目录中，并使用项目 /conf/indexConfig.js 覆盖 static/conf/indexConfig.js 中的配置文件即可
+直接将前端项目源码中的 web 目录粘贴到项目 static 目录中，并使用项目 /js/conf/indexConfig.js 覆盖 static/js/conf/indexConfig.js 中的配置文件即可
 ```
 
 ## 更新日志
+
+### 2025.07.13
+
+- 前端页面升级为 2.1.2 版本
+- 文件下载功能支持文件名称
+- 支持了文件分享功能
 
 ### 2025.05.25
 

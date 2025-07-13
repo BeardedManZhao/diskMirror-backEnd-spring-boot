@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>解析分享链接</title>
+</head>
+<body>
+
+<div style="border: #0aa0ff solid 10px;text-align: center; border-radius: 10px;padding: 10%">
+    正在解析中...
+</div>
+<div>
+    技术支持：<a href="https://github.com/BeardedManZhao/diskMirror-backEnd-spring-boot.git">diskMirror-backEnd-spring-boot.git</a>
+</div>
+</body>
+</html>
+<script src="js/DiskMirrorFront.js"></script>
+<script>
+    const show = document.querySelector("body>div");
+    const searchParams = DiskMirrorFront.search_Params("meta");
+    if (searchParams.length === 0) {
+        show.innerText = "链接出现错误，无法找到分享的文件"
+    } else {
+        const url = atob(searchParams[searchParams.length - 1]);
+        show.innerText = "即将跳转链接，请稍等~"
+        window.location.href = decodeURIComponent(url);
+    }
+</script>

@@ -407,7 +407,7 @@ class DiskMirror {
             } else {
                 console.error(err);
             }
-            return
+            return;
         }
         if (checkFun !== undefined && !checkFun({
             userId: userId,

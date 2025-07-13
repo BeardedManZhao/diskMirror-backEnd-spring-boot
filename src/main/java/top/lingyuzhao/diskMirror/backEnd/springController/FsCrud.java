@@ -18,9 +18,12 @@ import top.lingyuzhao.diskMirror.conf.Config;
 import top.lingyuzhao.diskMirror.core.Adapter;
 import top.lingyuzhao.diskMirror.core.DiskMirror;
 import top.lingyuzhao.utils.IOUtils;
+import top.lingyuzhao.utils.StrUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -88,6 +91,7 @@ public class FsCrud implements CRUD {
                 break;
             }
         }
+        jsonObject.put("secure.key", defKey);
     }
 
     /**
@@ -218,7 +222,7 @@ public class FsCrud implements CRUD {
     @Override
     public void downLoad(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                          @PathVariable("userId") String userId, @PathVariable("type") String type,
-                         String fileName, Integer sk) {
+                         @RequestParam("fileName") String fileName,  @RequestParam("sk") Integer sk) {
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put("userId", userId);
         jsonObject.put("fileName", fileName);
@@ -226,7 +230,6 @@ public class FsCrud implements CRUD {
 
         // 解密并提取 sk
         getDiskMirrorXorSecureKey(httpServletRequest, sk == null ? 0 : sk, jsonObject);
-
         // 获取文件元数据及最后修改时间
         final JSONObject urlsNoRecursion;
         try {
@@ -258,8 +261,9 @@ public class FsCrud implements CRUD {
             return;
         }
 
+        final String s = URLEncoder.encode(StrUtils.splitByLast(fileName, '/', 2)[0], StandardCharsets.UTF_8);
         // 设置其他响应头
-        httpServletResponse.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        httpServletResponse.setHeader("Content-Disposition", "attachment; filename=\"" + s + "\"; filename*=UTF-8''" + s);
         httpServletResponse.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
 
         try (InputStream fileInputStream = adapter.downLoad(jsonObject)) {

@@ -1,0 +1,56 @@
+@keyframes jokerBox_pop_up_show_display_life {
+    0% {
+        opacity: 0;
+        height: 0;
+        transform: scale(0);
+    }
+    15% {
+        opacity: 1;
+        height: auto;
+        transform: scale(1);
+    }
+    85% {
+        opacity: 1;
+        height: auto;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        height: 0;
+        transform: scale(0);
+    }
+}
+
+@keyframes jokerBox_pop_up_show_display_life_close {
+    0% {
+        opacity: 1;
+        height: auto;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        height: 0;
+        transform: scale(0);
+    }
+}
+
+
+.jokerBox_pop_up_show_div {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 98%;
+    background: rgba(0, 0, 0, 0);
+    text-align: center;
+    padding: 1%;
+    transition: all 2s;
+    /*Animation: pop_up_show_xxx_display_none 2s ;*/
+    /*Animation: pop_up_show_xxx_display_none 2s;*/
+}
+
+.jokerBox_pop_up_show_div > .pop_up_content_close {
+    position: absolute;
+    right: 2%;
+    text-decoration: none;
+    transition: all 0.5s;
+}

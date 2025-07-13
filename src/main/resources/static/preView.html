@@ -39,6 +39,7 @@
 <div class="nav_pc">
     <div class="button_list0">
         <button class="item_Button download_button">点击下载!</button>
+        <button class="item_Button share_button">点击分享!</button>
         <button class="item_Button" onclick="window.open('index.html')">前往主页!</button>
     </div>
 </div>
@@ -48,6 +49,8 @@
 <script>
     const htmlHeadingElement = document.querySelector("h2");
     const searchParams = DiskMirrorFront.search_Params("url");
+    const skList = DiskMirrorFront.search_Params("sk");
+    const sk = skList.length === 0 ? '' : '&sk=' + atob(skList[skList.length - 1]);
 
     // 获取到文件名字
     let searchParams1;
@@ -56,7 +59,7 @@
         document.querySelector("body").classList.add('notFind')
     } else {
 
-        const searchParam = searchParams[searchParams.length - 1];
+        const searchParam = searchParams[searchParams.length - 1] + sk;
         searchParams1 = DiskMirrorFront.search_Params("fileName", searchParam);
         // 获取到 url
         const imageExtensions = ['.jpg', '.png', '.jpeg', '.gif', '.bmp', '.webp'];
@@ -82,19 +85,36 @@
             document.querySelector('audio').src = searchParam;
             document.querySelector('audio').hidden = false;
         } else if (textExtensions.includes(searchParamType)) {
-            // 直接使用 FileWriter
-            const searchParams = DiskMirrorFront.search_Params("server_id");
-            if (searchParams.length < 1) {
-                alert("error!!!")
-                window.location.href = "index.html"
+            if (searchParam.indexOf('sk') !== -1) {
+                alert("您不是此文件的所有者，无法预览文本！");
+            } else {
+                // 直接使用 FileWriter
+                const searchParams = DiskMirrorFront.search_Params("server_id");
+                if (searchParams.length < 1) {
+                    alert("error!!!")
+                    window.location.href = "index.html"
+                }
+                const s = `FileWriter.html?server_id=${searchParams[searchParams.length - 1]}&fileName=${searchParamName}&fileUrl=${searchParam}`;
+                console.info(s)
+                window.location.href = s
             }
-            const s = `FileWriter.html?server_id=${searchParams[searchParams.length - 1]}&fileName=${searchParamName}&fileUrl=${searchParam}`;
-            console.info(s)
-            window.location.href = s
         } else {
             document.querySelector('button').innerText = `不支持预览 ${searchParamName} 点击下载!`
         }
 
-        document.querySelector('.download_button').addEventListener('click', () => window.open(searchParam))
+        document.querySelector('.download_button').addEventListener('click', () => window.open(searchParam));
+        document.querySelector('.share_button').addEventListener('click', () => {
+            if (searchParam.indexOf('sk') !== -1) {
+                alert("您不是此文件的所有者，无法分享！");
+                return;
+            }
+            const sk_str = prompt("请输入您的空间对应的密钥，用于创建sk", '0');
+            if (sk_str === undefined) {
+                return;
+            }
+            const s = window.location.href.split('/')
+            const u = s[0] + '//' + s[2] + '/shareParse.html?meta=' + btoa(encodeURIComponent(window.location.href + '&sk=' + btoa(sk_str)));
+            prompt("请复制分享链接", u)
+        });
     }
 </script>

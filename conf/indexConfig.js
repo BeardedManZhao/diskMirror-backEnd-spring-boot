@@ -6,7 +6,7 @@ const indexConfig = {
     spaceType: "Binary",
     // 盘镜 服务器所处的域
     domain: undefined,
-}
+};
 
 // 获取完整的URL
 const url = window.location.href;
