@@ -87,6 +87,7 @@ public interface CRUD {
     @ResponseBody
     default void downLoad2(HttpServletRequest httpServletRequest,
                            HttpServletResponse httpServletResponse,
+                           @RequestHeader(name = "Range", required = false) String rangeHeader,
                            @PathVariable("userId") String userId,
                            @PathVariable("type") String type,
                            @PathVariable("sk") String sk) {
@@ -98,7 +99,7 @@ public interface CRUD {
         final String path = requestURI.substring(le);
         // 提取文件名/路径部分 requestURI.substring(le) 现在 fileNameWithPath 就是 ** 匹配的内容
         try {
-            downLoad(httpServletRequest, httpServletResponse, userId, type, URLDecoder.decode(path, httpServletRequest.getCharacterEncoding()), Integer.parseInt(sk));
+            downLoad(httpServletRequest, httpServletResponse, rangeHeader, userId, type, URLDecoder.decode(path, httpServletRequest.getCharacterEncoding()), Integer.parseInt(sk));
         } catch (UnsupportedEncodingException e) {
             DiskMirrorMAIN.logger.warn("无法解析的路径：" + path, e);
         }
@@ -122,6 +123,7 @@ public interface CRUD {
     @ResponseBody
     void downLoad(HttpServletRequest httpServletRequest,
                   HttpServletResponse httpServletResponse,
+                  @RequestHeader(name = "Range", required = false) String rangeHeader,
                   @PathVariable("userId") String userId, @PathVariable("type") String type,
                   @RequestParam("fileName") String fileName, @RequestParam(value = "sk", defaultValue = "0", required = false) Integer sk
     );

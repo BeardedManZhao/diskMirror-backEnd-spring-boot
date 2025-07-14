@@ -151,6 +151,10 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
+### 2025.07.15
+
+- 优化了视频类文件下载的速度！让其支持分块传输！
+
 ### 2025.07.13
 
 - 前端页面升级为 2.1.2 版本
