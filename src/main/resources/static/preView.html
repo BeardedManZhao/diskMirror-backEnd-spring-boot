@@ -72,7 +72,7 @@
         const searchParamType = searchParamName.substring(searchParamName.lastIndexOf('.'));
 
         console.info(searchParamType)
-        const indexOfSk = searchParam.indexOf('sk');
+        const indexOfSk = searchParam.indexOf('&sk');
         if (indexOfSk !== -1) {
             htmlHeadingElement.innerText = `来自他人的分享《${searchParamName}》`;
         } else {
