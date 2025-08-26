@@ -322,7 +322,6 @@ public class FsCrud implements CRUD {
                 }
             }
         } catch (IOException | RuntimeException e) {
-            DiskMirrorMAIN.logger.warn(e.toString());
             httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
