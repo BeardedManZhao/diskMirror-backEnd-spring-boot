@@ -25,7 +25,7 @@ disk-mirror:
   adapter-type: "LocalFSAdapter"
   # 要被盘镜管理的目录 用于存储数据的目录 此目录是真实目录
   root-dir: "/DiskMirror"
-  # 一般来说 如果对接带第三方文件系统 而非本次文件系统 则此参数则会派上用场，其代表的就是第三方文件系统的地址（需要注意的是如果给 Http 适配器使用，这里不可以使用 / 结尾！）
+  # 一般来说 如果对接带第三方文件系统 而非本次文件系统 则此参数则会派上用场，其代表的就是第三方文件系统的地址
   fs-default-fs: "hdfs://localhost:8020/"
   # 当处理之后，如果处理无错误会返回一个结果状态，此数值代表的就是是否正确处理
   ok-value: "ok!!!!"
@@ -41,12 +41,22 @@ disk-mirror:
   secure-key: ""
   # 指定的几个用户的空间对应的容量
   space-max-size: { }
+  # 指定后端服务器相关的配置
+  backend:
+    # 指定后端服务器的关机控制器
+    shutdown-controller:
+      # 这里代表是否要启用关机控制器
+      enable: false
+      # 这里代表的是关机控制器的操作密钥 此密钥独立于 diskMirror 可防止被其它用户关机
+      password: "zhao"
+      # 这里代表的是在关机之前预留的时间，一般是用来将关机的信息返回给客户端的 单位是毫秒
+      timeout: 5000
   # 设置要使用的空间配置方式 目前支持 HashMapper 和 JedisMapper 两种，用于将不同空间的配置信息放到第三方平台
   use-space-config-mode: "HashMapper"
   # redis 配置
   redis-host-port-db: "127.0.0.1:6379:0"
   # redis 密码
-  redis-password: "38243824"
+  redis-password: "0000"
   # 图像文件压缩模块配置
   image-compress-module:
     # 设置位 true 代表启用~ 反之则不启用 不启用的将不会被加载到 diskMirror 中
@@ -150,6 +160,10 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 ```
 
 ## 更新日志
+
+### 2025.09.06
+
+- 修复了分享功能问题，移除了冗余日志
 
 ### 2025.07.15
 

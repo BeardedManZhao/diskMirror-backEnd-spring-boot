@@ -21,6 +21,16 @@ disk-mirror:
   secure-key: ""
   # 指定的几个用户的空间对应的容量
   space-max-size: { }
+  # 指定后端服务器相关的配置
+  backend:
+    # 指定后端服务器的关机控制器
+    shutdown-controller:
+      # 这里代表是否要启用关机控制器
+      enable: false
+      # 这里代表的是关机控制器的操作密钥 此密钥独立于 diskMirror 可防止被其它用户关机
+      password: "zhao"
+      # 这里代表的是在关机之前预留的时间，一般是用来将关机的信息返回给客户端的 单位是毫秒
+      timeout: 5000
   # 设置要使用的空间配置方式 目前支持 HashMapper 和 JedisMapper 两种，用于将不同空间的配置信息放到第三方平台
   use-space-config-mode: "HashMapper"
   # redis 配置
