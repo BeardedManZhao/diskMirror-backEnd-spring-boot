@@ -4,6 +4,8 @@ diskMirror 后端服务器的 SpringBoot 版本，此版本中拓展了 DiskMirr
 
 ## 我如何部署与配置
 
+> 可以联系微信（微信号 CH-liming02240898）进行定制修改或代替部署哦！
+
 ### docker 方式部署 diskMirror【省去了 JDK 和系统相关的操作只需要修改配置，过程中需要等待程序自动编译】
 
 ![20240425173711](https://github.com/BeardedManZhao/diskMirror-backEnd-spring-boot/assets/113756063/93b519e7-357e-4621-9127-d4edbfd47b3a)
