@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试页面</title>
+</head>
+<body>
+
+</body>
+</html>
+<script src="/js/diskMirror.js"></script>
+<script>
+
+    // 空间ID
+    const spaceId = 1;
+    // 空间SK
+    const spaceSk = 0;
+    // 盘镜服务器
+    const diskMirrorServer = "http://localhost:8080/";
+    const diskMirror = new DiskMirror(diskMirrorServer);
+    // 设置空间SK
+    diskMirror.setSk(spaceSk);
+    // 开始调用函数
+    console.info("getUrlsNoRecursion");
+    diskMirror.getUrlsNoRecursion(spaceId, 'Binary',
+        (r) => {
+            console.info(r);
+        },
+        (error) => {
+            // 操作失败后
+            console.info(error);
+        }
+    )
+</script>

@@ -190,6 +190,71 @@ class DiskMirror {
     }
 
     /**
+     * 获取到指定空间的所有 文本文件的 url
+     * @param userId {int} 需要被读取的空间id
+     * @param type {'TEXT'|'Binary'} 文件类型
+     * @param okFun {function} 操作成功之后的回调函数 输入是被获取额结果文件的json对象
+     * @param errorFun {function} 操作失败之后的回调函数 输入是错误信息
+     * @param checkFun {function} 获取前的检查函数 输入是请求参数对象，如果返回的是一个false 则代表不进行获取操作
+     */
+    getUrlsNoRecursion(userId, type, okFun = undefined, errorFun = (e) => 'res' in e ? alert(e['res']) : alert(e), checkFun = undefined,) {
+        // getUrls function body
+        if (userId === undefined || type === undefined || type === '') {
+            const err = "您必须要输入 userId 以及 type 参数才可以进行 url 的获取";
+            if (errorFun !== undefined) {
+                errorFun(err);
+            } else {
+                console.error(err);
+            }
+            return;
+        }
+        const formData = new FormData();
+        // 设置请求参数
+        const params = {
+            userId: userId,
+            type: type,
+            "secure.key": this.getSk()
+        };
+        if (checkFun !== undefined && !checkFun(params)) {
+            return;
+        }
+        const blob = new Blob([JSON.stringify(params)], {
+            type: 'application/json'
+        });
+        formData.append('params', blob, "params");
+        // 开始进行请求发送
+        axios.defaults.withCredentials = true;
+        axios(
+            {
+                method: 'post',
+                url: this.diskMirrorUrl + this.getController() + '/getUrlsNoRecursion',
+                data: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        ).then(function (res) {
+            if (res.data['res'] !== 'ok!!!!') {
+                if (errorFun !== undefined) {
+                    errorFun(res.data);
+                }
+                return;
+            }
+            if (okFun !== undefined) {
+                okFun(res.data);
+            } else {
+                console.info(res.data);
+            }
+        }).catch(function (err) {
+            if (errorFun !== undefined) {
+                errorFun(err);
+            } else {
+                console.error(err);
+            }
+        });
+    }
+
+    /**
      * 删除指定空间的指定文件
      * @param userId {int} 空间id
      * @param type {'TEXT'|'Binary'} 文件类型

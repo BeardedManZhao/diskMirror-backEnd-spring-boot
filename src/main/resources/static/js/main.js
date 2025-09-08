@@ -200,7 +200,7 @@ function extractedFsList(res) {
             )
         },
         document.querySelector("#diskMirrorPathInput"),
-        f => diskMirror.downLoad(userId, type, f.fileName, (res) => window.open(`preView.html?server_id=${userId}&url=` + res)),
+        f => diskMirror.downLoad(userId, type, f.fileName, (res) => window.open(`preView.html?server_id=${userId}&url=` + encodeURIComponent(res))),
     );
 }
 

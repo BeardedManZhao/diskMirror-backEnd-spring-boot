@@ -1,123 +1,350 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>在线预览</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>在线预览 — DiskMirror</title>
+
+    <!-- keep existing stylesheets (do not modify them) -->
+    <link href="css/backEnd.css" rel="stylesheet">
+    <link href="css/public.css" rel="stylesheet">
+
+    <!-- optional font (will fall back to site's fonts if blocked) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <style>
-        html {
-            height: 100%;
+        /* Scoped fairly-specific styles to avoid colliding with global public.css/backEnd.css */
+        :root{
+            --glass-bg: rgba(255,255,255,0.06);
+            --glass-border: rgba(255,255,255,0.12);
+            --accent: rgba(125, 138, 255, 1);
+            --accent-2: rgba(88, 200, 255, 1);
+            --muted: rgba(255,255,255,0.72);
         }
 
-        body.notFind {
-            width: 100%;
-            height: 100%;
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            animation: none;
-            background-image: url("image/404.jpg");
+        html,body{height:100%;font-family: 'Inter', 'Exo', sans-serif;}
+
+        /* page container */
+        .preview-root{
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:32px;
+            box-sizing:border-box;
         }
 
-        .item_Button {
-            text-shadow: #FFFFFF 0 0 10px;
+        /* card */
+        .glass-card{
+            width:100%;
+            max-width:1100px;
+            display:grid;
+            grid-template-columns: 1fr 360px;
+            gap:28px;
+            padding:26px;
+            border-radius:16px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 30px rgba(8,10,20,0.5);
+            backdrop-filter: blur(10px) saturate(120%);
+            -webkit-backdrop-filter: blur(10px) saturate(120%);
+            color:var(--muted);
         }
+
+        /* left: preview area */
+        .preview-area{
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+            align-items:center;
+            justify-content:center;
+            padding:18px;
+            border-radius:12px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+        }
+
+        .preview-media{
+            width:100%;
+            max-height:64vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+            border-radius:12px;
+            border: 1px solid rgba(255,255,255,0.04);
+            background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(255,255,255,0.01));
+        }
+
+        .preview-media img, .preview-media video, .preview-media audio{
+            max-width:100%;
+            max-height:64vh;
+            height:auto;
+            width:auto;
+            display:block;
+        }
+
+        .preview-placeholder{
+            padding:48px 24px;
+            text-align:center;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* right: info & actions */
+        .side-panel{
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+            padding:12px;
+        }
+
+        .file-title{
+            font-weight:700;
+            font-size:18px;
+            color:#fff;
+            word-break:break-all;
+        }
+
+        .meta-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+        .meta-item{font-size:13px;color:rgba(255,255,255,0.7)}
+
+        .actions{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+
+        .btn{
+            appearance:none;border:0;padding:12px 14px;border-radius:10px;font-weight:600;cursor:pointer;
+            background: linear-gradient(90deg,var(--accent),var(--accent-2));
+            color:#0b1220;box-shadow:0 6px 18px rgba(98,99,255,0.18);
+            transition:transform .12s ease,opacity .12s ease;
+        }
+        .btn:active{transform:translateY(1px)}
+
+        .btn-ghost{
+            background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);
+        }
+
+        .small-btns{display:flex;gap:8px;flex-wrap:wrap}
+
+        .copy-msg{font-size:12px;color:rgba(255,255,255,0.6)}
+
+        /* footer */
+        .footer-note{font-size:12px;color:rgba(255,255,255,0.45);margin-top:8px}
+
+        /* not found state */
+        .not-found{display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;padding:40px}
+
+        /* responsive */
+        @media (max-width:900px){
+            .glass-card {
+                grid-template-columns: 1fr;
+                max-width: 820px;
+                /* width: 100vw; */
+                padding: 0;
+            }
+            .preview-root {
+                padding: 0;
+            }
+            .side-panel{order:2}
+        }
+
+        /* subtle accent line */
+        .accent-line{height:3px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+
+        /* ensure our .item_Button visuals match theme but avoid changing global class behavior */
+        .preview-root .item_Button{box-shadow:none;text-shadow:none}
     </style>
 </head>
-<link href="css/backEnd.css" rel="stylesheet">
-<link href="css/public.css" rel="stylesheet">
 <body>
-<div style="text-align: center">
-    <h2 class="item_Button noClick" style="text-align: center">
+<div class="preview-root">
+    <div class="glass-card glass-effect">
 
-    </h2>
-    <hr>
-    <img alt="预览图" hidden onerror="this.src='image/404.jpg'" src="image/404.jpg"
-         style="height: auto; max-width: 90%">
-    <video controls hidden style="height: auto; max-width: 90%"></video>
-    <audio controls hidden style="max-width: 90%"></audio>
-</div>
-<div class="nav_pc">
-    <div class="button_list0">
-        <button class="item_Button download_button">点击下载!</button>
-        <button class="item_Button share_button">点击分享!</button>
-        <button class="item_Button" onclick="window.open('index.html')">前往主页!</button>
+        <main class="preview-area">
+            <div class="preview-media" id="previewMedia">
+                <!-- media elements kept in DOM for compatibility; hidden/displayed by JS -->
+                <img id="previewImage" alt="预览图" src="image/404.jpg" onerror="this.src='image/404.jpg'" style="display:none">
+                <video id="previewVideo" controls style="display:none"></video>
+                <audio id="previewAudio" controls style="display:none"></audio>
+            </div>
+
+            <div id="previewInfo" class="preview-placeholder">
+                <div id="previewTitle" style="font-weight:600;">准备预览…</div>
+                <div style="height:6px"></div>
+                <div style="font-size:13px;color:rgba(255,255,255,0.6)">支持图片 / 视频 / 音频和常见文本类型的处理。</div>
+            </div>
+
+        </main>
+
+        <aside class="side-panel">
+            <div>
+                <div class="file-title" id="fileTitle">—</div>
+                <div class="meta-row" style="margin-top:8px">
+                    <div class="meta-item" id="fileType">类型：—</div>
+                    <div class="meta-item" id="fileSize">大小：—</div>
+                </div>
+                <div class="accent-line" style="margin-top:12px"></div>
+            </div>
+
+            <div class="actions">
+                <button id="downloadBtn" class="btn">下载 / 打开 文件</button>
+<!--                <button id="openNewBtn" class="btn btn-ghost">在新标签打开</button>-->
+
+                <div class="small-btns">
+                    <button id="shareBtn" class="btn btn-ghost">生成分享链接</button>
+                    <button id="copyUrlBtn" class="btn btn-ghost">复制原始链接</button>
+                </div>
+
+                <div class="copy-msg" id="copyMsg"> </div>
+                <div class="footer-note">提示：若为文本文件并且你为文件所有者，将会跳转到编辑页面。</div>
+            </div>
+
+            <div style="margin-top:auto">
+                <div class="meta-item">Powered by DiskMirror</div>
+                <div style="height:6px"></div>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                    <button class="item_Button" onclick="window.open('index.html')">返回主页</button>
+                    <button class="item_Button share_button" id="fallbackShare">分享（旧）</button>
+                </div>
+            </div>
+
+        </aside>
+
     </div>
 </div>
-</body>
-</html>
+
 <script src="js/DiskMirrorFront.js"></script>
 <script>
-    const htmlHeadingElement = document.querySelector("h2");
-    const searchParams = DiskMirrorFront.search_Params("url");
-    const skList = DiskMirrorFront.search_Params("sk");
-    const sk = skList.length === 0 ? '' : '&sk=' + atob(skList[skList.length - 1]);
+    /* Enhanced preview logic — preserves the original behavior but with clearer flow.
+       Assumes DiskMirrorFront.search_Params is available (from DiskMirrorFront.js)
+    */
+    (function(){
+        const $ = (sel)=>document.querySelector(sel);
+        const previewImage = $('#previewImage');
+        const previewVideo = $('#previewVideo');
+        const previewAudio = $('#previewAudio');
+        const previewTitle = $('#previewTitle');
+        const fileTitle = $('#fileTitle');
+        const fileTypeEl = $('#fileType');
+        const fileSizeEl = $('#fileSize');
+        const downloadBtn = $('#downloadBtn');
+        const shareBtn = $('#shareBtn');
+        const copyUrlBtn = $('#copyUrlBtn');
+        const copyMsg = $('#copyMsg');
 
-    // 获取到文件名字
-    let searchParams1;
-    if (searchParams.length === 0) {
-        htmlHeadingElement.innerText = "请您确保是从文件管理界面跳转过来的!"
-        document.querySelector("body").classList.add('notFind')
-    } else {
+        // helpers
+        function humanFileSize(bytes){ if(!bytes && bytes!==0) return '—'; const thresh=1024; if(bytes<thresh) return bytes+' B'; const units=['KB','MB','GB','TB']; let u=-1; do{bytes/=thresh;++u}while(bytes>=thresh&&u<units.length-1); return bytes.toFixed(1)+' '+units[u]; }
 
-        const searchParam = searchParams[searchParams.length - 1] + sk;
-        searchParams1 = DiskMirrorFront.search_Params("fileName", searchParam);
-        // 获取到 url
-        const imageExtensions = ['.jpg', '.png', '.jpeg', '.gif', '.bmp', '.webp'];
-        const videoExtensions = ['.mp4', '.avi', '.mkv', '.flv', '.wmv', '.mov', '.mpg', '.mpeg', '.rmvb', '.rm', '.3gp', '.ts', '.m4v', '.webm', '.vob', '.mts', '.m2ts', '.mxf', '.ogv', '.ogm', '.m2v', '.mpe'];
-        const audioExtensions = ['.mp3', '.wav', '.flac', '.aac', '.wma'];
-        const textExtensions = ['.yaml', '.txt', '.log', '.md', '.json', '.xml', '.yml', '.ini', '.cfg', '.conf', '.properties'];
+        // get params — keep compatibility with old code
+        const urlParams = DiskMirrorFront.search_Params('url');
+        const skList = DiskMirrorFront.search_Params('sk');
+        const sk = skList.length === 0 ? '' : '&sk=' + atob(skList[skList.length - 1]);
 
-        // 获取到后缀
-        const searchParamName = searchParams1[searchParams1.length - 1];
-        const searchParamType = searchParamName.substring(searchParamName.lastIndexOf('.'));
-
-        console.info(searchParamType)
-        const indexOfSk = searchParam.indexOf('&sk');
-        if (indexOfSk !== -1) {
-            htmlHeadingElement.innerText = `来自他人的分享《${searchParamName}》`;
-        } else {
-            htmlHeadingElement.innerText = searchParam;
+        if(!urlParams || urlParams.length===0){
+            // not found state — reuse CSS classes and show friendly message
+            document.body.classList.add('notFind');
+            fileTitle.innerText = '无法找到预览内容';
+            previewTitle.innerText = '请从文件管理界面使用预览功能或携带正确的 url 参数。';
+            downloadBtn.disabled = true; downloadBtn.classList.add('btn-ghost');
+            return;
         }
-        if (imageExtensions.includes(searchParamType)) {
-            document.querySelector('img').src = searchParam;
-            document.querySelector('img').hidden = false;
-        } else if (videoExtensions.includes(searchParamType)) {
-            document.querySelector('video').src = searchParam;
-            document.querySelector('video').hidden = false;
-        } else if (audioExtensions.includes(searchParamType)) {
-            document.querySelector('audio').src = searchParam;
-            document.querySelector('audio').hidden = false;
-        } else if (textExtensions.includes(searchParamType)) {
-            if (indexOfSk !== -1) {
-                alert("您不是此文件的所有者，无法预览文本！");
+
+        const searchParam = decodeURIComponent(urlParams[urlParams.length-1]) + sk;
+        const pathCandidates = DiskMirrorFront.search_Params('fileName', searchParam);
+        const searchParamName = pathCandidates && pathCandidates.length ? pathCandidates[pathCandidates.length-1] : (searchParam.split('/').pop() || 'file');
+        const ext = (searchParamName.lastIndexOf('.')>-1) ? searchParamName.substring(searchParamName.lastIndexOf('.')).toLowerCase() : '';
+
+        // extension sets
+        const imageExt = ['.jpg', '.png', '.jpeg', '.gif', '.bmp', '.webp','.svg'];
+        const videoExt = ['.mp4', '.webm', '.mov', '.mkv', '.avi', '.flv', '.wmv','.m4v'];
+        const audioExt = ['.mp3', '.wav', '.flac', '.aac', '.wma','.ogg'];
+        const textExt = ['.yaml', '.txt', '.log', '.md', '.json', '.xml', '.yml', '.ini', '.cfg', '.conf', '.properties'];
+
+        // meta
+        fileTitle.innerText = searchParamName;
+        fileTypeEl.innerText = '类型：' + (ext || '未知');
+
+        // try to detect size (if DiskMirrorFront provides a header-fetch helper, use it) — fallback to unknown
+        fileSizeEl.innerText = '大小：获取中...';
+
+        // show preview based on type
+        function hideAll(){ previewImage.style.display='none'; previewVideo.style.display='none'; previewAudio.style.display='none'; }
+        hideAll();
+
+        if(imageExt.includes(ext)){
+            previewImage.src = searchParam;
+            previewImage.style.display = 'block';
+            previewTitle.innerText = searchParamName;
+        } else if(videoExt.includes(ext)){
+            previewVideo.src = searchParam;
+            previewVideo.style.display = 'block';
+            previewVideo.onerror = () => {
+                previewVideo.poster = 'image/404.jpg';
+            }
+            previewTitle.innerText = searchParamName;
+        } else if(audioExt.includes(ext)){
+            previewAudio.src = searchParam;
+            previewAudio.style.display = 'block';
+            previewTitle.innerText = searchParamName;
+        } else if(textExt.includes(ext)){
+            // access control: if sk present (means not owner) block preview
+            if(searchParam.indexOf('sk') !== -1){
+                alert('您不是此文件的所有者，无法预览文本！');
+                previewTitle.innerText = '无法预览文本 — 需要权限';
             } else {
-                // 直接使用 FileWriter
-                const searchParams = DiskMirrorFront.search_Params("server_id");
-                if (searchParams.length < 1) {
-                    alert("error!!!")
-                    window.location.href = "index.html"
+                // require server_id param like older flow
+                const serverParams = DiskMirrorFront.search_Params('server_id');
+                if(!serverParams || serverParams.length<1){
+                    alert('预览错误：缺少 server_id 参数');
+                    window.location.href = 'index.html';
+                    return;
                 }
-                const s = `FileWriter.html?server_id=${searchParams[searchParams.length - 1]}&fileName=${searchParamName}&fileUrl=${searchParam}`;
-                console.info(s)
-                window.location.href = s
+                const s = `FileWriter.html?server_id=${serverParams[serverParams.length-1]}&fileName=${encodeURIComponent(searchParamName)}&fileUrl=${encodeURIComponent(searchParam)}`;
+                // redirect to editor/viewer
+                window.location.href = s;
+                return;
             }
         } else {
-            document.querySelector('button').innerText = `不支持预览 ${searchParamName} 点击下载!`
+            // unsupported type — keep a fallback message
+            previewTitle.innerText = '不支持在页面内预览此类型的文件';
         }
 
-        document.querySelector('.download_button').addEventListener('click', () => window.open(searchParam));
-        document.querySelector('.share_button').addEventListener('click', () => {
-            if (indexOfSk !== -1) {
-                alert("您不是此文件的所有者，无法分享！");
-                return;
-            }
-            const sk_str = prompt("请输入您的空间对应的密钥，用于创建sk", '0');
-            if (sk_str === null) {
-                return;
-            }
+        // wire up actions
+        downloadBtn.addEventListener('click', ()=> window.open(searchParam));
+
+        shareBtn.addEventListener('click', ()=>{
+            if(searchParam.indexOf('sk') !== -1){ alert('您不是此文件的所有者，无法分享！'); return; }
+            const sk_str = prompt('请输入您的空间对应的密钥，用于创建sk', '0');
+            if(sk_str === null) return;
             const s = window.location.href.split('/')
             const u = s[0] + '//' + s[2] + '/shareParse.html?meta=' + btoa(encodeURIComponent(window.location.href + '&sk=' + btoa(sk_str)));
-            prompt("请复制分享链接", u)
+            // copy to clipboard and show
+            try{ navigator.clipboard.writeText(u); copyMsg.innerText = '分享链接已复制到剪贴板'; }catch(e){ copyMsg.innerText = '无法复制，请手动复制弹窗中的链接'; }
+            setTimeout(()=>{ prompt('分享链接（若未自动复制，请手动复制）', u); }, 150);
         });
-    }
+
+        copyUrlBtn.addEventListener('click', ()=>{
+            try{ navigator.clipboard.writeText(searchParam); copyMsg.innerText = '原始链接已复制到剪贴板'; }
+            catch(e){ copyMsg.innerText = '复制失败，请手动拷贝链接'; prompt('原始链接', searchParam); }
+        });
+
+        // fallback older share button behavior (keeps compatibility)
+        $('#fallbackShare').addEventListener('click', ()=>{
+            if(searchParam.indexOf('sk') !== -1){ alert('您不是此文件的所有者，无法分享！'); return; }
+            const sk_str = prompt('请输入您的空间对应的密钥，用于创建sk', '0');
+            if(sk_str === null) return;
+            const s = window.location.href.split('/');
+            const u = s[0] + '//' + s[2] + '/shareParse.html?meta=' + btoa(encodeURIComponent(window.location.href + '&sk=' + btoa(sk_str)));
+            prompt('请复制分享链接', u);
+        });
+
+        // try to HEAD the file to get size if helper exists on DiskMirrorFront
+        if(typeof DiskMirrorFront.fetchHead === 'function'){
+            DiskMirrorFront.fetchHead(searchParam).then(h=>{
+                const size = h && h['content-length'] ? parseInt(h['content-length'],10) : null;
+                fileSizeEl.innerText = '大小：' + (size?humanFileSize(size):'—');
+            }).catch(()=>{ fileSizeEl.innerText = '大小：—'; });
+        } else {
+            fileSizeEl.innerText = '大小：—';
+        }
+
+    })();
 </script>
+</body>
+</html>
