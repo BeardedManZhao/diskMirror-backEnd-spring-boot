@@ -5,7 +5,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>diskMirror-backEnd-spring-boot</artifactId>
-    <version>2025.09.06</version>
+    <version>2025.09.08</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

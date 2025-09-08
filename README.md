@@ -163,7 +163,7 @@ java -Dspring.config.location=file:/xxx/xxx/xxx/application.yaml -jar /xxx/xxx/x
 
 ## 更新日志
 
-### 新版本于 2025-09-08 开始开发 版本号暂定
+### 2025-09-08
 
 - 前端页面升级为 2.1.3 版本
 
